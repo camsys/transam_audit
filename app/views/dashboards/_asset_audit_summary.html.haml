@@ -1,3 +1,7 @@
+:ruby
+  report = AuditResultsSummaryReport.new
+  audits = Audit.active
+
 :scss
   $warning-color: #D47500;
 
@@ -7,17 +11,24 @@
   }
 
 %fieldset
-  %legend Assets Audit Summary
+  %legend Audit Summary
   .panel.panel-default{:style => 'height: 300px;overflow-y:auto;'}
-    %table.table.table-hover#asset_compliance
-      %tbody
-        - @audit_results[1].each do |row|
-          %tr
-            %td.left= row[0] if @organization_list.length > 1
-            %td.left= row[1]
-            %td.right.col-sm-6
-              - pcnt_passed = (row[3] / row[2].to_f) * 100
-              - pcnt_failed = 100 - pcnt_passed
-              .progress.audit-result
-                .progress-bar.progress-bar-success{:role => 'progressbar', :aria => {:value_now => pcnt_passed, :value_min => 0, :value_max => 100}, :style => "min-width: 2em; width: #{pcnt_passed}%"}
-                  = "#{format_as_percentage(pcnt_passed)}"
+    .panel-body
+      - if audits.empty?
+        %p.text-center No active audits found
+      - else
+        - audits.each do |audit|
+          %p.text-center= "<strong>#{audit.name} Results</strong>".html_safe
+          - audit_results = report.get_data audit, @organization_list
+          %table.table.table-hover#asset_compliance
+            %tbody
+              - audit_results[1].each do |row|
+                %tr
+                  %td.left= row[0] if @organization_list.length > 1
+                  %td.left= row[1]
+                  %td.right.col-sm-6
+                    - pcnt_passed = (row[3] / row[2].to_f) * 100
+                    - pcnt_failed = 100 - pcnt_passed
+                    .progress.audit-result
+                      .progress-bar.progress-bar-success{:role => 'progressbar', :aria => {:value_now => pcnt_passed, :value_min => 0, :value_max => 100}, :style => "min-width: 2em; width: #{pcnt_passed}%"}
+                        = "#{format_as_percentage(pcnt_passed)}"

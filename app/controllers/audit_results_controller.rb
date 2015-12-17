@@ -28,6 +28,15 @@ class AuditResultsController < OrganizationAwareController
       values << @org_filter
     end
 
+    # Check to see if we got type to select on
+    @types_filter = params[:types_filter]
+    if @types_filter.blank?
+      @types_filter = []
+    else
+      conditions << 'class_name IN (?)'
+      values << @types_filter
+    end
+
     # Check to see if we got an audit to sub select on.
     @audit_filter = params[:audit_filter]
     if @audit_filter.blank?
@@ -49,8 +58,7 @@ class AuditResultsController < OrganizationAwareController
     @audit_results = AuditResult.where(conditions.join(' AND '), *values)
 
     # Get the list of audit types for this organization
-    audit_ids = AuditResult.where(:organization_id => @organization_list).pluck(:audit_id).uniq
-    @audits = Audit.where(:id => audit_ids)
+    @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
 
     # cache the set of object keys in case we need them later
     #cache_list(@activities, INDEX_KEY_LIST_VAR)

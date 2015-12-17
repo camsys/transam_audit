@@ -59,14 +59,11 @@ class AuditResult < ActiveRecord::Base
     name
   end
 
-  # Returns an object-specific type for the auditable object
-  def class_type
-    if auditable.type_of? :asset
-      auditable.asset_type
-    else
-      auditable_type
-    end
-  end
+  # Return the Rails path to this object
+	def path
+		"#{auditable_type.underscore}_path(:id => '#{auditable.object_key}')"
+	end
+
   #-----------------------------------------------------------------------------
   # Protected Methods
   #-----------------------------------------------------------------------------

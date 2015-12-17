@@ -62,6 +62,19 @@ class Audit < ActiveRecord::Base
     name
   end
 
+  # Return an instance of the auditor class
+  def get_auditor
+    auditor.constantize.new(self)
+  end
+
+  # Pass-through the operational? method to the activity
+  def operational?
+    if activity.present?
+      activity.operational?
+    else
+      false
+    end
+  end
   #-----------------------------------------------------------------------------
   # Protected Methods
   #-----------------------------------------------------------------------------

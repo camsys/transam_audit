@@ -14,9 +14,9 @@ class AssetAuditor < AbstractAuditor
     # Loop through each org at a time
     Organization.all.each do |org|
       # Only process operational assets
-      org.assets.operational.pluck(:object_key).each do |obj_key|
+      Asset.operational.where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Asset.find_by(object_key: obj_key)
-        check asset
+        update_status asset
       end
     end
 
@@ -25,7 +25,7 @@ class AssetAuditor < AbstractAuditor
   # Takes an asset (typed or untyped) and checks the compliance and updates the
   # audit table wth the results
   #-----------------------------------------------------------------------------
-  def check a
+  def update_status a
 
     errors = []
     if a.nil?
@@ -39,7 +39,7 @@ class AssetAuditor < AbstractAuditor
     end
 
     # Strongly type the asset but only if we need to
-    asset = a.is_typed? ? a : Asset.get_typed_asset a
+    asset = a.is_typed? ? a : Asset.get_typed_asset(a)
 
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance. Type is #{asset.class.name}"
     start_date = Chronic.parse('10/1/2015').to_date
@@ -64,9 +64,10 @@ class AssetAuditor < AbstractAuditor
     end
 
     audit = AuditResult.find_or_create_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => @audit.id) do |aud|
+      aud.class_name = asset.asset_type.name
       aud.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
       if errors.present?
-        aud.notes = errors.compact.join(' ')
+        aud.notes = errors.compactjoin("\n")
       end
     end
     audit.save
@@ -74,6 +75,7 @@ class AssetAuditor < AbstractAuditor
   end
 
   #-----------------------------------------------------------------------------
+  #
   #-----------------------------------------------------------------------------
   def initialize(audit)
     super
