@@ -1,4 +1,4 @@
-transam_lib
+transam_audit
 ===============
 
-Document Library for TransAM
+Auditing engine for TransAM
