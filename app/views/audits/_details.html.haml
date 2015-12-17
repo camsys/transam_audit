@@ -1,0 +1,13 @@
+%ul.nav.nav-tabs.responsive-tabs
+  %li
+    %a{:href => "#desc", :data =>{:toggle => 'tab'}}
+      = "Description"
+  %li
+    %a{:href => "#inst", :data =>{:toggle => 'tab'}}
+      = "Instructions"
+
+.tab-content
+  .tab-pane.fade#desc
+    %p= format_as_text(@audit.description)
+  .tab-pane.fade#inst
+    %p= format_as_text(@audit.instructions)

@@ -1,0 +1,18 @@
+- if can? :update, @audit
+  .btn-group.pull-right.panel-action
+    %button.btn.btn-primary.btn-sm.dropdown-toggle{:data => {:toggle => 'dropdown'}}
+      %i.fa.fa-cog
+      = " Actions"
+      %span.caret
+    %ul.dropdown-menu{:role => 'menu'}
+      - if can? :update, @audit
+        %li.text-left
+          = link_to edit_audit_path(@audit) do
+            %i.fa.fa-fw.fa-edit
+            = " Update this audit"
+      - if can? :destroy, @audit
+        %li.divider
+        %li
+          = link_to audit_path(@audit), :method => :delete, :data => {:confirm => "Are you sure you want to remove this audit? The action can't be undone."} do
+            %i.fa.fa-trash-o.fa-fw
+            = " Remove this audit"

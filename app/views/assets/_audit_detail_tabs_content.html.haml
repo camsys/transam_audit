@@ -1,0 +1,4 @@
+- if @asset.audit_results.present?
+  .tab-pane.fade#audit
+    .tab-content
+      = render :partial => 'audit_results/index_table_compact', :locals => {:audit_results => @asset.audit_results}

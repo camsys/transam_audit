@@ -1,0 +1,25 @@
+:ruby
+  table_dom_id = SecureRandom.hex
+
+.table-responsive
+  %table.table.table-hover{:id => table_dom_id, :data => {:toggle => 'table',
+    :pagination => 'false',
+    :show_pagination_switch => 'false',
+    :search => 'false',
+    :show_export => 'false',
+    :show_columns => 'false',
+    :show_toggle => 'false'}}
+    %thead
+      %tr
+        %th.center{:data => {:sortable => 'true'}} Activity
+        %th.center{:data => {:sortable => 'true'}} Result
+        %th.center{:data => {:sortable => 'true'}} Updated At
+        %th.center{:data => {:sortable => 'true'}} Notes
+
+    %tbody
+      - audit_results.each do |a|
+        %tr
+          %td.center.nowrap= a.audit
+          %td.center.nowrap= a.audit_result_type
+          %td.center.nowrap= format_as_date(a.updated_at)
+          %td.left= format_as_text(a.notes)

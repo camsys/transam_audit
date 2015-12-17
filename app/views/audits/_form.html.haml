@@ -1,0 +1,79 @@
+= simple_form_for(@audit,
+  :html => {:class => 'form-vertical'},
+  :wrapper => :vertical_form,
+  :wrapper_mappings => {:check_boxes => :vertical_radio_and_checkboxes,
+  :radio_buttons => :vertical_radio_and_checkboxes,
+  :file => :vertical_file_input,
+  :boolean => :vertical_boolean}) do |f|
+
+  .row
+    .col-sm-6
+      = f.input :name, :label => 'Name', :required => true, :wrapper_html => {:class => 'text-limiter-wrapper'}, :input_html => {:class => 'text-limiter', :maxlength => 64}
+      %p.text-muted.text-limiter-counter
+        %span#name-counter
+        characters remaining.
+
+    .col-sm-3
+      = f.input :auditor,   :collection => @auditors, :include_blank => false
+
+    .col-sm-3
+      = f.input :schedule,  :collection => ['Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'], :include_blank => false
+
+  .row
+    .col-sm-2
+      = f.input :active,    :collection => [['No', false],['Yes', true]], :include_blank => false
+
+  .row
+    .col-sm-12
+      = f.input :description, :as => :text, :required => true, :wrapper_html => {:class => 'text-limiter-wrapper'}, :input_html => {:class => 'text-limiter', :rows => 6, :maxlength => 1024}
+      %p.text-muted.text-limiter-counter
+        %span#description-counter
+        characters remaining.
+
+  .row
+    .col-sm-12
+      = f.input :instructions, :as => :text, :required => true, :wrapper_html => {:class => 'text-limiter-wrapper'}, :input_html => {:class => 'text-limiter', :rows => 3, :maxlength => 254}
+      %p.text-muted.text-limiter-counter
+        %span#instructions-counter
+        characters remaining.
+
+  .row
+    .col-sm-12
+      = f.button :submit, :class => 'btn btn-primary'
+
+:javascript
+
+  $(document).ready(function() {
+
+    $('#audit_name').simplyCountable({
+      counter: '#name-counter',
+      maxCount: $('#audit_name').attr('maxlength'),
+      strictMax: false,
+      safeClass: 'text-muted',
+      overClass: 'text-danger'
+    });
+
+    $('#audit_description').simplyCountable({
+      counter: '#description-counter',
+      maxCount: $('#audit_description').attr('maxlength'),
+      strictMax: false,
+      safeClass: 'text-muted',
+      overClass: 'text-danger'
+    });
+
+    $('#audit_instructions').simplyCountable({
+      counter: '#instructions-counter',
+      maxCount: $('#audit_instructions').attr('maxlength'),
+      strictMax: false,
+      safeClass: 'text-muted',
+      overClass: 'text-danger'
+    });
+
+  });
+
+
+  $('#new_audit').validate({
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });

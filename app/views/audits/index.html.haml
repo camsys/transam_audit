@@ -1,0 +1,15 @@
+.col-sm-12.col-md-10.col-md-offset-1
+  .page-header
+    %h2 Audits
+
+  .row
+    .col-sm-12
+      = render 'search_form'
+
+  .row
+    .col-sm-12
+      - if @audits.empty?
+        %p No matching audits found
+      - else
+        %p Found #{@audits.count} matching audits
+        = render :partial => 'index_table', :locals => {:audits => @audits}

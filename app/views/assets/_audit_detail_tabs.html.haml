@@ -1,0 +1,5 @@
+- if @asset.audit_results.present?
+  %li
+    %a{:href => "#audit", :data =>{:toggle => 'tab'}}
+      %span.badge.pull-right= @asset.audit_results.count
+      Audit Results

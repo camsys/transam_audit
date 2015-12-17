@@ -1,0 +1,39 @@
+= form_tag audits_path, :id => 'filter_form', :method => "get", :class => 'navbar-form navbar-right panel-action' do
+  - if @organization_list.count > 1
+    .form-group
+      = select_tag(:org_filter, options_for_select(Organization.where('id IN (?)', @organization_list).collect{|a| [a.coded_name, a.id]}, :multiple => true, :selected => @org_filter), :class => "form-control")
+  .form-group
+    = select_tag(:audit_result_type_filter, options_for_select(AuditResultType.active.collect{|x| [x.name, x.id]}, :selected => @audit_result_type_filter), :class => "form-control", :multiple => true)
+  .form-group
+    = select_tag(:audit_filter, options_for_select(@audits.collect{|x| [x.name, x.id]}, :selected => @audit_filter), :class => "form-control")
+
+  = button_tag :class => 'btn btn-default', :type => 'submit' do
+    %i.fa.fa-filter
+
+:javascript
+
+  $(document).ready(function() {
+
+    $('#organization_filter').multiselect({
+      inheritClass: true,
+      maxHeight: 250,
+      buttonText: function(options, select) {
+        if (options.length === 0) {
+          return 'Orgs...';
+        } else {
+          return 'Orgs - ' + options.length + ' selected';
+        }
+      }
+    });
+    $('#audit_result_type_filter').multiselect({
+      inheritClass: true,
+      maxHeight: 250,
+      buttonText: function(options, select) {
+        if (options.length === 0) {
+          return 'Result...';
+        } else {
+          return 'Result - ' + options.length + ' selected';
+        }
+      }
+    });
+  });

@@ -1,0 +1,12 @@
+.btn-group.pull-right.panel-action
+  - if can? :create, Audit
+    .pull-right
+      = link_to new_audit_path, :class => 'btn btn-success', :style => 'margin-left: 2px;' do
+        %i.fa.fa-plus
+        = " New Audit"
+
+:javascript
+
+  $(document).ready(function() {
+
+  });
