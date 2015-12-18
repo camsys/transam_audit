@@ -47,8 +47,10 @@ module TransamAuditable
   # Instance Methods
   #-----------------------------------------------------------------------------
 
+  #-----------------------------------------------------------------------------
   # Returns a list of audits that this asset has participated in that are
   # both currently active and operational
+  #-----------------------------------------------------------------------------
   def audits
     Audit.active.where(:id => audit_results.pluck(:audit_id).uniq)
   end
@@ -58,11 +60,17 @@ module TransamAuditable
   #-----------------------------------------------------------------------------
   protected
 
-  # Each operational audit is re-run
+  #-----------------------------------------------------------------------------
+  # Each operational audit is re-run after a save event on the asset
+  #-----------------------------------------------------------------------------
   def update_audits
-    job = KeywordIndexUpdateJob.new(self.class.name, object_key)
-    Delayed::Job.enqueue job, :priority => 10
-    self.is_dirty = false
+    Rails.logger.debug "In update_audits callback"
+    audits.each do |audit|
+      if audit.operational?
+        job = AssetAuditUpdateJob.new(audit, object_key)
+        Delayed::Job.enqueue job, :priority => 10
+      end
+    end
   end
 
 end
