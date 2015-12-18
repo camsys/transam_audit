@@ -1,0 +1,11 @@
+%li.divider
+- Audit.active.each do |audit|
+  %li.text-left
+    = link_to audit_results_path(:audit_filter => audit.id) do
+      %i.fa.fa-line-chart.fa-fw
+      = "#{audit.name} results"
+%li.divider
+%li.text-left
+  = link_to audit_results_path do
+    %i.fa.fa-line-chart.fa-fw
+    = "All audit results"
