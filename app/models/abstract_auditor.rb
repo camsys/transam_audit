@@ -6,13 +6,13 @@
 class AbstractAuditor
 
   # Every auditor has an audit context
-  attr_accessor :audit
+  attr_accessor :context
 
   #-----------------------------------------------------------------------------
   #
   #-----------------------------------------------------------------------------
   def initialize(audit)
-    self.audit = audit
+    self.context = audit
   end
 
   #-----------------------------------------------------------------------------

@@ -14,7 +14,7 @@ class AssetAuditor < AbstractAuditor
     # Loop through each org at a time
     Organization.all.each do |org|
       # Only process operational assets
-      write_to_activity_log org, "Performing #{audit.name} on asset inventory"
+      write_to_activity_log org, "Performing #{context.name} on asset inventory"
       Asset.operational.where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Asset.find_by(object_key: obj_key)
         update_status asset
@@ -64,14 +64,14 @@ class AssetAuditor < AbstractAuditor
       end
     end
 
-    audit = AuditResult.find_or_create_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => @audit.id) do |aud|
-      aud.class_name = asset.asset_type.name
-      aud.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
+    audit_results = AuditResult.find_or_create_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => context.id) do |ar|
+      ar.class_name = asset.asset_type.name
+      ar.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
       if errors.present?
-        aud.notes = errors.join("\n")
+        ar.notes = errors.join("\n")
       end
     end
-    audit.save
+    audit_results.save
 
   end
 
