@@ -1,8 +1,8 @@
-:ruby
-  table_dom_id = SecureRandom.hex
+#table_actions.btn-toolbar
+  = render :partial => "index_actions"
 
 .table-responsive
-  %table.table.table-hover{:id => table_dom_id, :data => {:toggle => 'table',
+  %table.table.table-hover{:id => 'audit_results_table', :data => {:toggle => 'table',
     :pagination => 'true',
     :show_pagination_switch => 'true',
     :page_list => "[5, 10, 20, 50, 100, 200]",
@@ -11,14 +11,19 @@
     :toolbar => "#table_actions",
     :export_types => "['csv', 'txt', 'excel']",
     :show_export => 'false',
+    :resizable => 'true',
     :show_columns => 'false',
-    :show_toggle => 'false'}}
+    :show_toggle => 'false',
+    :maintain_selected => 'true',
+    :single_select => 'false'}}
     %thead
       %tr
+        %th.center{:data => {:field => 'checked', :checkbox => 'true'}}
+        %th.center{:data => {:field => 'object_key', :visible => 'false'}}
         - if @organization_list.count > 1
           %th.center{:data => {:sortable => 'true'}} Org
         %th.center{:data => {:sortable => 'true'}} Audit
-        %th.center{:data => {:sortable => 'true'}} Type
+        %th.center{:data => {:field => 'object_type', :sortable => 'true'}} Type
         %th.center{:data => {:sortable => 'true'}} Description
         %th.center{:data => {:sortable => 'true'}} Result
         %th.center{:data => {:sortable => 'true'}} Updated At
@@ -27,6 +32,8 @@
     %tbody
       - audit_results.each do |a|
         %tr
+          %td
+          %td.center.nowrap= a.auditable.object_key
           - if @organization_list.count > 1
             %td.left.nowrap= a.organization.short_name
           %td.center.nowrap= a.audit
@@ -36,4 +43,76 @@
           %td.center.nowrap= format_as_date(a.updated_at)
           %td.left= format_as_text(a.notes)
 
-= render :partial => 'shared/table_scripts', :locals => {:table_id => table_dom_id, :path_pattern => activity_path("xxx")}
+= render :partial => 'shared/table_scripts', :locals => {:table_id => 'audit_results_table', :path_pattern => activity_path("xxx")}
+
+:javascript
+
+  var selected_rows = new Set();
+  var selected_states = new Set();
+
+  $(document).ready(function() {
+
+    // Disable the table actions
+    enable_disable_table_actions();
+
+    // Add a handler for the print action which appends the selected orders to
+    // the href
+    $(".selected-action").on('click', function(e) {
+      //alert(selected_orders);
+      var href = $(this).attr('href');
+      $(this).attr('href', href + '&targets=' + Array.from(selected_rows));
+      return true;
+    });
+  });
+
+  $('#audit_results_table').on('check.bs.table', function(e, row) {
+    update_selected();
+  }).on('uncheck.bs.table', function(e, row) {
+    update_selected();
+  }).on('check-all.bs.table', function(e, row) {
+    update_selected();
+  }).on('uncheck-all.bs.table', function(e, row) {
+    update_selected();
+  }).on('sort.bs.table', function(e, name, order) {
+    //console.log('Sorting on ' + name + ' dir => ' + order);
+    $('#audit_results_table').bootstrapTable('selectPage', 1);
+  }).on('load-success.bs.table', function() {
+    // Table reloaded, clear saved selection
+    selected_rows = new Set();
+    selected_states = new Set();
+    enable_disable_table_actions();
+  });
+
+  // Enables or disables the package actions depending on how many are selected
+  function enable_disable_table_actions() {
+    var num = selected_rows.size;
+    if (num > 0) {
+      if (selected_states.size == 1) {
+        $('.selected-action').removeClass('disabled');
+      } else {
+        $('.selected-action').addClass('disabled');
+      }
+    } else {
+      $('.selected-action').addClass('disabled');
+    }
+  };
+
+  // Updates the selected rows in the table
+  function update_selected() {
+    var selected = $('#audit_results_table').bootstrapTable('getSelections');
+    selected_rows = new Set();
+    selected_states = new Set();
+    for (i = 0; i < selected.length; i++) {
+      //console.log(selected[i]);
+      selected_rows.add(selected[i].object_key);
+      selected_states.add(selected[i].object_type.toLowerCase().replace(/ /g, "_"));
+    }
+    //console.log(selected_rows);
+    enable_disable_table_actions();
+  };
+
+  // Removes an object identified by its object key from the set of objects selected
+  function remove_from_selected(object_key) {
+    selected_rows.delete(object_key);
+    enable_disable_table_actions();
+  };

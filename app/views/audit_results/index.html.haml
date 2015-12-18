@@ -11,5 +11,5 @@
       - if @audit_results.empty?
         %p No matching audit results found
       - else
-        %p Found #{@audit_results.count} matching activities
+        %p Found #{@audit_results.count} matching results
         = render :partial => 'index_table', :locals => {:audit_results => @audit_results}
