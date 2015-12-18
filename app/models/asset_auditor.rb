@@ -68,7 +68,7 @@ class AssetAuditor < AbstractAuditor
       aud.class_name = asset.asset_type.name
       aud.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
       if errors.present?
-        aud.notes = errors.compactjoin("\n")
+        aud.notes = errors.join("\n")
       end
     end
     audit.save
