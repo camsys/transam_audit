@@ -14,14 +14,17 @@
         characters remaining.
 
     .col-sm-3
-      = f.input :auditor,   :collection => @auditors, :include_blank => false
+      = f.input :auditor_class_name, :required => true, :label => 'Auditor'
 
     .col-sm-3
-      = f.input :schedule,  :collection => ['Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'], :include_blank => false
+      = f.input :activity_id, :collection => Activity.active.collect{|x| [x.name, x.id]}
 
   .row
+    .col-sm-3
+      = f.input :schedule, :collection => ['Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'], :include_blank => false
+
     .col-sm-2
-      = f.input :active,    :collection => [['No', false],['Yes', true]], :include_blank => false
+      = f.input :active, :collection => [['No', false],['Yes', true]], :include_blank => false
 
   .row
     .col-sm-12

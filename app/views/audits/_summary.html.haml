@@ -1,8 +1,10 @@
 .hidden-md.hidden-sm.hidden-xs
   = format_field("Name", audit.name)
-  = format_field("Auditor", audit.auditor)
+  = format_field("Activity", link_to(audit.activity, activity_path(audit.activity)))
+  = format_field("Auditor", audit.auditor_class_name)
   %hr
   = format_field("Active", format_as_boolean(audit.active))
+  = format_field("Operational", format_as_boolean(audit.operational?))
   = format_field("Schedule", format_as_text(audit.schedule))
   %hr
   = format_field("Last Run", format_as_date(audit.last_run))
@@ -11,8 +13,11 @@
 .hidden-lg
   .col-sm-4
     = format_field("Name", audit.name)
+    = format_field("Activity", link_to(audit.activity, activity_path(audit.activity)))
+    = format_field("Auditor", audit.auditor_class_name)
   .col-sm-4
     = format_field("Active", format_as_boolean(audit.active))
+    = format_field("Operational", format_as_boolean(audit.operational?))
     = format_field("Schedule", format_as_text(audit.schedule))
   .col-sm-4
     = format_field("Last Run", format_as_date(audit.last_run))

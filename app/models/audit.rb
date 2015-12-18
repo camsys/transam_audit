@@ -44,7 +44,7 @@ class Audit < ActiveRecord::Base
     :description,
     :instructions,
     :schedule,
-    :auditor,
+    :auditor_class_name,
     :active
   ]
 
@@ -63,8 +63,8 @@ class Audit < ActiveRecord::Base
   end
 
   # Return an instance of the auditor class
-  def get_auditor
-    auditor.constantize.new(self)
+  def auditor
+    auditor_class_name.constantize.new(self)
   end
 
   # Pass-through the operational? method to the activity

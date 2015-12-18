@@ -33,11 +33,12 @@ GO
 CREATE TABLE audits  (
 	id          	int(11) AUTO_INCREMENT NOT NULL,
 	object_key  	varchar(12) NOT NULL,
+	activity_id   int(11) NULL,
 	name        	varchar(64) NOT NULL,
 	description 	text NOT NULL,
 	instructions	varchar(254) NOT NULL,
 	schedule    	varchar(64) NOT NULL,
-	auditor     	varchar(128) NOT NULL,
+	auditor_class_name	varchar(128) NOT NULL,
 	last_run    	datetime NULL,
 	active      	tinyint(1) NOT NULL,
 	created_at  	datetime NOT NULL,

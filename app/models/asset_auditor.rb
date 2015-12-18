@@ -14,6 +14,7 @@ class AssetAuditor < AbstractAuditor
     # Loop through each org at a time
     Organization.all.each do |org|
       # Only process operational assets
+      write_to_activity_log org, "Performing #{audit.name} on asset inventory"
       Asset.operational.where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Asset.find_by(object_key: obj_key)
         update_status asset
