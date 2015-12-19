@@ -13,7 +13,7 @@ class AssetAuditUpdateJob < AbstractAssetUpdateJob
   def execute_job(asset)
 
     asset.audits.each do |audit|
-      if audit.operatonal?
+      if audit.operational?
         audit.get_auditor.update_status asset
       end
     end
