@@ -13,5 +13,6 @@ script:
 - bundle exec rake app:transam_audit:prepare_rspec
 - bundle exec $TEST_SUITE
 before_install:
+- mysql -e "create database IF NOT EXISTS transam_audit_testing;" -uroot
 - openssl aes-256-cbc -K $encrypted_c0561a102e3c_key -iv $encrypted_c0561a102e3c_iv
   -in spec/dummy/db/schema.rb.enc -out spec/dummy/db/schema.rb -d
