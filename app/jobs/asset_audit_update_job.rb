@@ -14,7 +14,7 @@ class AssetAuditUpdateJob < AbstractAssetUpdateJob
 
     asset.audits.each do |audit|
       if audit.operational?
-        audit.get_auditor.update_status asset
+        audit.auditor.update_status asset
       end
     end
   end
@@ -30,7 +30,7 @@ class AssetAuditUpdateJob < AbstractAssetUpdateJob
 
   def initialize(audit, object_key)
     super(object_key)
-    self.object_key = object_key
+    self.audit = audit
   end
 
 end
