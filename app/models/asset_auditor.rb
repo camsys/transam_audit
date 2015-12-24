@@ -57,7 +57,7 @@ class AssetAuditor < AbstractAuditor
       errors << "Service Status has not been updated during the audit period"
     end
 
-    if asset.respond_to? :milage_updates
+    if asset.respond_to? :mileage_updates
       if asset.reported_mileage_date.blank? or asset.reported_mileage_date < start_date
         passed = false
         errors << "Mileage has not been updated during the audit period"
