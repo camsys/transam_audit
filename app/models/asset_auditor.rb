@@ -70,6 +70,8 @@ class AssetAuditor < AbstractAuditor
     audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
     if errors.present?
       audit_result.notes = errors.join("\n")
+    else
+      audit_result.notes = nil # clear out any existing errors if no new errors
     end
     # save this update
     audit_result.save
