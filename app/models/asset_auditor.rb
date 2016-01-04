@@ -64,14 +64,15 @@ class AssetAuditor < AbstractAuditor
       end
     end
 
-    audit_results = AuditResult.find_or_create_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => context.id) do |ar|
-      ar.class_name = asset.asset_type.name
-      ar.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
-      if errors.present?
-        ar.notes = errors.join("\n")
-      end
+    # If this audit result doesn't exist create it then update it otherwise
+    # find the existing one and update it
+    audit_result = AuditResult.find_or_create_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => context.id, :class_name => asset.asset_type.name)
+    audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
+    if errors.present?
+      audit_result.notes = errors.join("\n")
     end
-    audit_results.save
+    # save this update
+    audit_result.save
 
   end
 
