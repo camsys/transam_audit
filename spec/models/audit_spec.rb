@@ -6,7 +6,7 @@ RSpec.describe Audit, :type => :model do
 
   describe 'associations' do
     it 'has many results' do
-      expect(AuditResult.column_names).to include('audit_id')
+      expect(test_audit).to have_many(:audit_results)
     end
   end
 

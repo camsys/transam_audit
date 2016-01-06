@@ -7,16 +7,16 @@ RSpec.describe AuditResult, :type => :model do
 
   describe 'associations' do
     it 'has an auditable object' do
-      expect(AuditResult.column_names).to include('auditable_id')
+      expect(test_result).to belong_to(:auditable)
     end
     it 'belongs to an audit' do
-      expect(AuditResult.column_names).to include('audit_id')
+      expect(test_result).to belong_to(:audit)
     end
     it 'has an org' do
-      expect(AuditResult.column_names).to include('organization_id')
+      expect(test_result).to belong_to(:organization)
     end
     it 'has a type' do
-      expect(AuditResult.column_names).to include('audit_result_type_id')
+      expect(test_result).to belong_to(:audit_result_type)
     end
   end
 
