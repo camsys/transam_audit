@@ -24,6 +24,7 @@
           %th.center{:data => {:sortable => 'true'}} Org
         %th.center{:data => {:sortable => 'true'}} Audit
         %th.center{:data => {:field => 'object_type', :sortable => 'true'}} Type
+        %th.center{:data => {:sortable => 'true'}} Asset Tag
         %th.center{:data => {:sortable => 'true'}} Description
         %th.center{:data => {:sortable => 'true'}} Result
         %th.center{:data => {:sortable => 'true'}} Updated At
@@ -38,7 +39,8 @@
             %td.left.nowrap= a.organization.short_name
           %td.center.nowrap= a.audit
           %td.left.nowrap= a.class_name
-          %td.left.nowrap= link_to a.auditable.description, eval(a.path)
+          %td.left.nowrap= link_to a.auditable.asset_tag, eval(a.path)
+          %td.left.nowrap= a.auditable.description
           %td.center.nowrap= a.audit_result_type
           %td.center.nowrap= format_as_date(a.updated_at)
           %td.left= format_as_text(a.notes)
