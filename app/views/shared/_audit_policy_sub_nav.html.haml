@@ -6,7 +6,7 @@
 
 - audits.each do |audit|
   %li.text-left
-    = link_to audit_results_path(:audit_filter => audit.id) do
+    = link_to audit_results_path(:audit_filter => audit.id, :audit_result_type_filter => [AuditResultType::AUDIT_RESULT_FAILED]) do
       %i.fa.fa-line-chart.fa-fw
       = "#{audit.name} results"
 
