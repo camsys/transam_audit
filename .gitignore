@@ -19,7 +19,6 @@ spec/tmp/*
 /vendor/bundle
 capybara-*.html
 config/initializers/secret_token.rb
-Gemfile.lock
 pickle-email-*.html
 rerun.txt
 .DS_Store
