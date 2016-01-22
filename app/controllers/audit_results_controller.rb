@@ -46,13 +46,14 @@ class AuditResultsController < OrganizationAwareController
       values << @audit_filter
     end
 
-    # Defaults to failed
     @audit_result_type_filter = params[:audit_result_type_filter]
-    conditions << 'audit_result_type_id IN (?)'
     if @audit_result_type_filter.blank?
-      @audit_result_type_filter = [AuditResultType::AUDIT_RESULT_FAILED]
+      @audit_result_type_filter = []
+    else
+      conditions << 'audit_result_type_id IN (?)'
+      values << @audit_result_type_filter
     end
-    values << @audit_result_type_filter
+
 
     # get the audit results for this organization
     @audit_results = AuditResult.where(conditions.join(' AND '), *values)
