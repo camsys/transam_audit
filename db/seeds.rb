@@ -8,13 +8,19 @@ is_sqlite =  (ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite
 #
 # Lookup Tables
 #
-# These are the lookup tables for TransAM NTD
+# These are the lookup tables for TransAM Audit
 #
 #------------------------------------------------------------------------------
 
-puts "======= Processing TransAM Lib Lookup Tables  ======="
+puts "======= Processing TransAM Audit Lookup Tables  ======="
 
-lookup_tables = %w{  }
+audit_result_types = [
+  {:name => 'Passed', :description => 'All tests passed the audit', :active => true},
+  {:name => 'Failed', :description => 'One or more tests failed the audit', :active => true},
+  {:name => 'Untested', :description => 'One or more audit tests were not completed', :active => true}
+]
+
+lookup_tables = %w{ audit_result_types }
 
 lookup_tables.each do |table_name|
   puts "  Loading #{table_name}"
@@ -37,11 +43,11 @@ end
 #
 # Merge Tables
 #
-# These are merged tables TransAM Lib
+# These are merged tables TransAM Audit
 #
 #------------------------------------------------------------------------------
 
-puts "======= Processing TransAM Lib Merge Tables  ======="
+puts "======= Processing TransAM Audit Merge Tables  ======="
 
 merge_tables = %w{ }
 
@@ -55,7 +61,7 @@ merge_tables.each do |table_name|
   end
 end
 
-puts "======= Processing TransAM Lib Reports  ======="
+puts "======= Processing TransAM Audit Reports  ======="
 
 reports = [
 ]
