@@ -13,15 +13,11 @@
       %tr
         %th.center{:data => {:sortable => 'true'}} Audit
         %th.center{:data => {:sortable => 'true'}} Activity
-        %th.center{:data => {:sortable => 'true'}} Status
         %th.center{:data => {:sortable => 'true'}} Updated At
-        %th.center{:data => {:sortable => 'true'}} Notes
 
     %tbody
       - audits.each do |a|
         %tr
           %td.left.nowrap= link_to a.name, audit_path(a)
           %td.left= link_to a.activity, activity_path(a.activity) if a.activity.present?
-          %td.center.nowrap= a.audit_status_type
           %td.center.nowrap= format_as_date(a.updated_at)
-          %td.left= format_as_text(a.notes)
