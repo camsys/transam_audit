@@ -60,8 +60,9 @@
     // Add a handler for the print action which appends the selected orders to
     // the href
     $(".selected-action").on('click', function(e) {
+
       //get appropriate bulk update form and then update targets
-      $(this).parent().children("input[name='targets']").val('&targets=' + Array.from(selected_rows));
+      $(this).parent().children("input[name='targets']").val(Array.from(selected_rows));
       return true;
     });
   });
