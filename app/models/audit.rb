@@ -29,6 +29,15 @@ class Audit < ActiveRecord::Base
   belongs_to :activity
 
   #-----------------------------------------------------------------------------
+  # Validations
+  #-----------------------------------------------------------------------------
+  validates :name,                    :presence => true
+  validates :auditor_class_name,      :presence => true
+  validates :schedule,                :presence => true
+  validates :description,             :presence => true
+  validates :instructions,            :presence => true
+
+  #-----------------------------------------------------------------------------
   # Scopes
   #-----------------------------------------------------------------------------
   scope :active, -> { where(:active => true) }
