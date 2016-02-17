@@ -23,33 +23,33 @@ RSpec.describe AssetAuditor do
   describe '.update_status' do
     it 'no asset' do
       expect(Rails.logger).to receive(:debug).with("Asset cannot be nil")
-      AssetAuditor.new(create(:activity)).send(:update_status, nil)
+      AssetAuditor.new(create(:audit)).send(:update_status, nil)
     end
     it 'disposed asset' do
       test_asset.update!(:disposition_date => Date.today)
-      expect(AssetAuditor.new(create(:activity)).send(:update_status, test_asset)).to eq([])
+      expect(AssetAuditor.new(create(:audit)).send(:update_status, test_asset)).to eq([])
     end
     it 'condition' do
-      AssetAuditor.new(create(:activity)).send(:update_status, test_asset)
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Condition has not been updated during the audit period')
     end
     it 'service status' do
-      AssetAuditor.new(create(:activity)).send(:update_status, test_asset)
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Service Status has not been updated during the audit period')
     end
     it 'mileage' do
-      AssetAuditor.new(create(:activity)).send(:update_status, test_asset)
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Mileage has not been updated during the audit period')
     end
     it 'passed audit result' do
       test_asset.update!(:reported_condition_date => Date.today, :service_status_date => Date.today, :reported_mileage_date => Date.today)
-      AssetAuditor.new(create(:activity)).send(:update_status, test_asset)
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_PASSED)
     end

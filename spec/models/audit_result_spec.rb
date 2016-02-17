@@ -20,6 +20,21 @@ RSpec.describe AuditResult, :type => :model do
     end
   end
 
+  describe 'validations' do
+    it 'must belong to an audit' do
+      test_result.audit = nil
+      expect(test_result.valid?).to be false
+    end
+    it 'must have an org' do
+      test_result.organization = nil
+      expect(test_result.valid?).to be false
+    end
+    it 'must have a type' do
+      test_result.audit_result_type = nil
+      expect(test_result.valid?).to be false
+    end
+  end
+
   it '#allowable_params' do
     expect(AuditResult.allowable_params).to eq([])
   end

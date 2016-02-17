@@ -10,6 +10,29 @@ RSpec.describe Audit, :type => :model do
     end
   end
 
+  describe 'validations' do
+    it 'must have a name' do
+      test_audit.name = nil
+      expect(test_audit.valid?).to be false
+    end
+    it 'must have a description' do
+      test_audit.description = nil
+      expect(test_audit.valid?).to be false
+    end
+    it 'must have instructions' do
+      test_audit.instructions = nil
+      expect(test_audit.valid?).to be false
+    end
+    it 'must have an auditor class' do
+      test_audit.auditor_class_name = nil
+      expect(test_audit.valid?).to be false
+    end
+    it 'must have a schedule' do
+      test_audit.schedule = nil
+      expect(test_audit.valid?).to be false
+    end
+  end
+
   it '#allowable_params' do
     expect(Audit.allowable_params).to eq([
       :activity_id,

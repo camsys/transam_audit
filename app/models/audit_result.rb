@@ -34,6 +34,13 @@ class AuditResult < ActiveRecord::Base
   belongs_to :audit_result_type
 
   #-----------------------------------------------------------------------------
+  # Validations
+  #-----------------------------------------------------------------------------
+  validates :audit,                    :presence => true
+  validates :organization,             :presence => true
+  validates :audit_result_type,        :presence => true
+
+  #-----------------------------------------------------------------------------
   # Scopes
   #-----------------------------------------------------------------------------
 
