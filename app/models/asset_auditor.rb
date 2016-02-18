@@ -43,22 +43,22 @@ class AssetAuditor < AbstractAuditor
     asset = a.is_typed? ? a : Asset.get_typed_asset(a)
 
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance. Type is #{asset.class.name}"
-    start_date = Chronic.parse('10/1/2015').to_date
-    end_date = Chronic.parse('12/31/2015').to_date
+    start_date = Chronic.parse('1/1/2016').to_date
+    end_date = Chronic.parse('2/29/2016').to_date
 
     passed = true
-    if asset.reported_condition_date.blank? or asset.reported_condition_date < start_date
+    if asset.reported_condition_date.blank? or asset.reported_condition_date < start_date or asset.reported_condition_date > end_date
       passed = false
       errors << "Condition has not been updated during the audit period"
     end
 
-    if asset.service_status_date.blank? or asset.service_status_date < start_date
+    if asset.service_status_date.blank? or asset.service_status_date < start_date or asset.service_status_date > end_date
       passed = false
       errors << "Service Status has not been updated during the audit period"
     end
 
     if asset.respond_to? :mileage_updates
-      if asset.reported_mileage_date.blank? or asset.reported_mileage_date < start_date
+      if asset.reported_mileage_date.blank? or asset.reported_mileage_date < start_date or asset.reported_mileage_date > end_date
         passed = false
         errors << "Mileage has not been updated during the audit period"
       end
@@ -71,7 +71,7 @@ class AssetAuditor < AbstractAuditor
     if errors.present?
       audit_result.notes = errors.join("\n")
     else
-      audit_result.notes = ""      
+      audit_result.notes = ""
     end
     # save this update
     audit_result.save
