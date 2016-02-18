@@ -58,9 +58,26 @@ RSpec.describe Audit, :type => :model do
       test_audit.activity = nil
       expect(test_audit.operational?).to be false
     end
+    describe 'not active' do
+      before(:each) do
+        test_audit.active = false
+      end
+      describe 'activity.operational? is' do
+        it 'false' do
+          test_audit.activity.update!(:start_date => Date.today - 5.days, :end_date => Date.today - 3.days)
+          expect(test_audit.activity.operational?).to be false
+          expect(test_audit.operational?).to be false
+        end
+        it 'true' do
+          test_audit.activity.update!(:start_date => Date.today - 3.days, :end_date => Date.today + 3.days)
+          expect(test_audit.activity.operational?).to be true
+          expect(test_audit.operational?).to be false
+        end
+      end
+    end
     describe 'matches activity.operational?' do
       it 'false' do
-        test_audit.activity = nil
+        test_audit.activity.update!(:start_date => Date.today - 5.days, :end_date => Date.today - 3.days)
         expect(test_audit.operational?).to be false
       end
       it 'true' do

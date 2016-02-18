@@ -79,7 +79,7 @@ class Audit < ActiveRecord::Base
   # Pass-through the operational? method to the activity
   def operational?
     if activity.present?
-      activity.operational?
+      activity.operational? and active
     else
       false
     end
