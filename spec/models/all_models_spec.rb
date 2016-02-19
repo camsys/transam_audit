@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe do
+RSpec.describe 'All Models' do
 
   # checks that the default of boolean `active` of all models does not overwrite input
   # a user input of false would be overridden by `self.active ||= true`. test prevents such a code snippet

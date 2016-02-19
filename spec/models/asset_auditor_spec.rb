@@ -8,9 +8,9 @@ RSpec.describe AssetAuditor do
     end
   end
 
-  class Vehicle < Asset
-    has_many :mileage_updates
-  end
+  # class Vehicle < Asset
+  #   has_many :mileage_updates
+  # end
 
   let(:test_asset) { create(:buslike_asset) }
 
@@ -41,14 +41,32 @@ RSpec.describe AssetAuditor do
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Service Status has not been updated during the audit period')
     end
-    it 'mileage' do
+    it 'mileage', :skip do
       AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Mileage has not been updated during the audit period')
     end
     it 'passed audit result' do
-      test_asset.update!(:reported_condition_date => Date.today, :service_status_date => Date.today, :reported_mileage_date => Date.today)
+      test_asset.condition_updates.create!(attributes_for(:condition_update_event))
+      test_asset.service_status_updates.create!(attributes_for(:service_status_update_event))
+
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
+      test_result = AuditResult.find_by(:auditable => test_asset)
+      expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_PASSED)
+    end
+    it 'passed audit result if on start date' do
+      test_asset.condition_updates.create!(attributes_for(:condition_update_event, :event_date => Date.new(2016,1,1)))
+      test_asset.service_status_updates.create!(attributes_for(:service_status_update_event, :event_date => Date.new(2016,1,1)))
+
+      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
+      test_result = AuditResult.find_by(:auditable => test_asset)
+      expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_PASSED)
+    end
+    it 'passed audit result if on end date' do
+      test_asset.condition_updates.create!(attributes_for(:condition_update_event, :event_date => Date.new(2016,2,29)))
+      test_asset.service_status_updates.create!(attributes_for(:service_status_update_event, :event_date => Date.new(2016,2,29)))
+
       AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_PASSED)

@@ -47,18 +47,18 @@ class AssetAuditor < AbstractAuditor
     end_date = Chronic.parse('2/29/2016').to_date
 
     passed = true
-    if asset.reported_condition_date.blank? or asset.reported_condition_date < start_date or asset.reported_condition_date > end_date
+    if asset.condition_updates.where(:event_date => start_date..end_date).count == 0
       passed = false
       errors << "Condition has not been updated during the audit period"
     end
 
-    if asset.service_status_date.blank? or asset.service_status_date < start_date or asset.service_status_date > end_date
+    if asset.service_status_updates.where(:event_date => start_date..end_date).count == 0
       passed = false
       errors << "Service Status has not been updated during the audit period"
     end
 
     if asset.respond_to? :mileage_updates
-      if asset.reported_mileage_date.blank? or asset.reported_mileage_date < start_date or asset.reported_mileage_date > end_date
+      if asset.mileage_updates.where(:event_date => start_date..end_date).count == 0
         passed = false
         errors << "Mileage has not been updated during the audit period"
       end
