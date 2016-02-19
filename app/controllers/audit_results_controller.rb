@@ -14,28 +14,28 @@ class AuditResultsController < OrganizationAwareController
 
     add_breadcrumb "Audit Results"
 
+    # Get the list of audit types for this organization
+    @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
+
     # Start to set up the query
     conditions  = []
     values      = []
 
     # Check to see if we got an organization to sub select on.
     @org_filter = params[:org_filter]
-    conditions << 'organization_id IN (?)'
     if @org_filter.blank?
-      values << @organization_list
-      @org_filter = []
-    else
-      values << @org_filter
+      @org_filter = [@organization_list.first]
     end
+    conditions << 'organization_id IN (?)'
+    values << @org_filter
 
     # Check to see if we got type to select on
     @types_filter = params[:types_filter]
     if @types_filter.blank?
-      @types_filter = []
-    else
-      conditions << 'class_name IN (?)'
-      values << @types_filter
+      @types_filter = [@types.first]
     end
+    conditions << 'class_name IN (?)'
+    values << @types_filter
 
     # Check to see if we got an audit to sub select on.
     @audit_filter = params[:audit_filter]
@@ -48,18 +48,13 @@ class AuditResultsController < OrganizationAwareController
 
     @audit_result_type_filter = params[:audit_result_type_filter]
     if @audit_result_type_filter.blank?
-      @audit_result_type_filter = []
-    else
-      conditions << 'audit_result_type_id IN (?)'
-      values << @audit_result_type_filter
+      @audit_result_type_filter = [AuditResultType::AUDIT_RESULT_FAILED]
     end
-
+    conditions << 'audit_result_type_id IN (?)'
+    values << @audit_result_type_filter
 
     # get the audit results for this organization
     @audit_results = AuditResult.where(conditions.join(' AND '), *values)
-
-    # Get the list of audit types for this organization
-    @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
 
     # cache the set of object keys in case we need them later
     #cache_list(@activities, INDEX_KEY_LIST_VAR)
