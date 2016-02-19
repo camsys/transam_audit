@@ -44,7 +44,7 @@ class AssetAuditor < AbstractAuditor
 
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance. Type is #{asset.class.name}"
     start_date = Chronic.parse('1/1/2016').to_date
-    end_date = Chronic.parse('2/29/2016').to_date
+    end_date = Chronic.parse('3/31/2016').to_date
 
     passed = true
     if asset.condition_updates.where(:event_date => start_date..end_date).count == 0
