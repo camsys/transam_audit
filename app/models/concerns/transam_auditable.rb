@@ -68,7 +68,7 @@ module TransamAuditable
     audits.each do |audit|
       if audit.operational?
         job = AssetAuditUpdateJob.new(audit, object_key)
-        Delayed::Job.enqueue job, :priority => 5
+        Delayed::Job.enqueue job, :priority => 0
       end
     end
   end
