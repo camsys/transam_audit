@@ -2,16 +2,6 @@ require 'rails_helper'
 
 RSpec.describe AssetAuditor do
 
-  class TestOrg < Organization
-    def get_policy
-      return Policy.where("`organization_id` = ?",self.id).order('created_at').last
-    end
-  end
-
-  # class Vehicle < Asset
-  #   has_many :mileage_updates
-  # end
-
   let(:test_asset) { create(:buslike_asset) }
 
   before(:each) do
@@ -41,8 +31,8 @@ RSpec.describe AssetAuditor do
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Service Status has not been updated during the audit period')
     end
-    it 'mileage', :skip do
-      AssetAuditor.new(create(:audit)).send(:update_status, test_asset)
+    it 'mileage' do
+      AssetAuditor.new(create(:audit)).send(:update_status, Vehicle.find(test_asset.id))
       test_result = AuditResult.find_by(:auditable => test_asset)
       expect(test_result.audit_result_type_id).to eq(AuditResultType::AUDIT_RESULT_FAILED)
       expect(test_result.notes).to include('Mileage has not been updated during the audit period')
