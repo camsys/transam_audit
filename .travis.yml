@@ -4,14 +4,11 @@ rvm:
 branches:
   only:
   - master
-env:
-- TEST_SUITE=rspec
-- TEST_SUITE=cucumber
 before_script:
 - cp spec/dummy/config/database.travis.yml spec/dummy/config/database.yml
 script:
 - bundle exec rake app:transam_audit:prepare_rspec
-- bundle exec $TEST_SUITE
+- bundle exec rspec
 before_install:
 - mysql -e "create database IF NOT EXISTS transam_audit_testing;" -uroot
 - openssl aes-256-cbc -K $encrypted_c0561a102e3c_key -iv $encrypted_c0561a102e3c_iv
