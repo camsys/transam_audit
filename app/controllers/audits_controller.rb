@@ -4,6 +4,7 @@
 class AuditsController < OrganizationAwareController
 
   before_action :set_audit, only: [:show, :edit, :update, :destroy]
+  before_action :reformat_date_fields, only: [:create, :update]
 
   INDEX_KEY_LIST_VAR  = "audits_list_cache_var"
 
@@ -131,6 +132,16 @@ class AuditsController < OrganizationAwareController
   #-----------------------------------------------------------------------------
   private
   #-----------------------------------------------------------------------------
+
+  def reformat_date_fields
+    params[:audit][:start_date] = reformat_date(params[:audit][:start_date]) unless params[:audit][:start_date].blank?
+    params[:audit][:end_date] = reformat_date(params[:audit][:end_date]) unless params[:audit][:end_date].blank?
+  end
+
+  def reformat_date(date_str)
+    form_date = Date.strptime(date_str, '%m/%d/%Y')
+    return form_date.strftime('%Y-%m-%d')
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_audit

@@ -14,7 +14,7 @@ class AssetAuditUpdateJob < AbstractAssetUpdateJob
 
     asset.audits.each do |audit|
       if audit.operational?
-        audit.auditor.update_status asset
+        audit.auditor.update_status asset, audit.start_date, audit.end_date
       end
     end
   end

@@ -22,8 +22,18 @@
   .row
     .col-sm-3
       = f.input :schedule, :collection => ['Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'], :include_blank => false
+    .col-sm-3
+      = f.input :start_date, :wrapper => :vertical_append, :label => "Start Date" do
+        = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.start_date)
+        %span.input-group-addon
+          %i.fa.fa-calendar
+    .col-sm-3
+      = f.input :end_date, :wrapper => :vertical_append, :label => "End Date" do
+        = f.input_field :end_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.end_date)
+        %span.input-group-addon
+          %i.fa.fa-calendar
 
-    .col-sm-2
+    .col-sm-3
       = f.input :active, :collection => [['No', false],['Yes', true]], :include_blank => false
 
   .row
@@ -47,6 +57,9 @@
 :javascript
 
   $(document).ready(function() {
+
+    $('[data-behavior~=datepicker]').datepicker({
+    });
 
     $('#audit_name').simplyCountable({
       counter: '#name-counter',

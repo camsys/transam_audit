@@ -17,7 +17,7 @@ class AssetAuditor < AbstractAuditor
       write_to_activity_log org, "Performing #{context.name} on asset inventory"
       Asset.operational.where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Asset.find_by(object_key: obj_key)
-        update_status asset
+        update_status asset, context.start_date, context.end_date
       end
     end
 
@@ -26,7 +26,7 @@ class AssetAuditor < AbstractAuditor
   # Takes an asset (typed or untyped) and checks the compliance and updates the
   # audit table wth the results
   #-----------------------------------------------------------------------------
-  def update_status a
+  def update_status a, start_date, end_date
 
     errors = []
     if a.nil?
@@ -42,9 +42,7 @@ class AssetAuditor < AbstractAuditor
     # Strongly type the asset but only if we need to
     asset = a.is_typed? ? a : Asset.get_typed_asset(a)
 
-    Rails.logger.debug "Testing asset #{asset.object_key} for compliance. Type is #{asset.class.name}"
-    start_date = Chronic.parse('1/1/2016').to_date
-    end_date = Chronic.parse('3/31/2016').to_date
+    Rails.logger.debug "Testing asset #{asset.object_key} for compliance between #{start_date} and #{end_date}. Type is #{asset.class.name}"
 
     passed = true
     if asset.condition_updates.where(:event_date => start_date..end_date).count == 0

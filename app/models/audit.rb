@@ -35,6 +35,8 @@ class Audit < ActiveRecord::Base
   validates :activity,                :presence => true
   validates :auditor_class_name,      :presence => true
   validates :schedule,                :presence => true
+  validates :start_date,              :presence => true
+  validates :end_date,                :presence => true
   validates :description,             :presence => true
   validates :instructions,            :presence => true
 
@@ -54,6 +56,8 @@ class Audit < ActiveRecord::Base
     :description,
     :instructions,
     :schedule,
+    :start_date,
+    :end_date,
     :auditor_class_name,
     :active
   ]
