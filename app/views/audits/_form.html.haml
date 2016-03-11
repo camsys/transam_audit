@@ -1,5 +1,5 @@
 = simple_form_for(@audit,
-  :html => {:class => 'form-vertical'},
+  :html => {:class => 'form-vertical audit_form'},
   :wrapper => :vertical_form,
   :wrapper_mappings => {:check_boxes => :vertical_radio_and_checkboxes,
   :radio_buttons => :vertical_radio_and_checkboxes,
@@ -17,7 +17,7 @@
       = f.input :auditor_class_name, :required => true, :label => 'Auditor'
 
     .col-sm-3
-      = f.input :activity_id, :collection => Activity.active.collect{|x| [x.name, x.id]}
+      = f.association :activity, :required => true
 
   .row
     .col-sm-3
@@ -75,7 +75,7 @@
   });
 
 
-  $('#new_audit').validate({
+  $('.audit_form').validate({
     submitHandler: function(form) {
       form.submit();
     }

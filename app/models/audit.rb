@@ -32,6 +32,7 @@ class Audit < ActiveRecord::Base
   # Validations
   #-----------------------------------------------------------------------------
   validates :name,                    :presence => true
+  validates :activity,                :presence => true
   validates :auditor_class_name,      :presence => true
   validates :schedule,                :presence => true
   validates :description,             :presence => true
