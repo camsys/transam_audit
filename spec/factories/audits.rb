@@ -6,6 +6,7 @@ FactoryGirl.define do
     instructions 'test instructions'
     schedule 'test schedule'
     auditor_class_name 'AssetAuditor'
+    association :activity
   end
 
 end

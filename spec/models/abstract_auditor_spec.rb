@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AbstractAuditor do
-  let(:abstract_auditor) { AbstractAuditor.new(create(:audit)) }
 
   it '.write_to_activity_log' do
 
@@ -17,6 +16,7 @@ RSpec.describe AbstractAuditor do
     sys_user = create(:normal_user, :first_name => 'system', :last_name => 'user')
     test_org = create(:organization)
     test_activity = create(:activity)
+    abstract_auditor = AbstractAuditor.new(create(:audit, :activity => test_activity))
     abstract_auditor.send(:write_to_activity_log, test_org, test_activity)
 
     expect(ActivityLog.last.item_type).to eq('AbstractAuditor')
@@ -30,6 +30,6 @@ RSpec.describe AbstractAuditor do
     User.destroy_all
     sys_user = create(:normal_user, :first_name => 'system', :last_name => 'user')
 
-    expect(abstract_auditor.send(:system_user)).to eq(sys_user)
+    expect(AbstractAuditor.new(create(:audit)).send(:system_user)).to eq(sys_user)
   end
 end
