@@ -33,7 +33,7 @@ RSpec.describe AuditsController, :type => :controller do
 
   it 'POST create' do
     Audit.destroy_all
-    post :create, :audit => attributes_for(:audit, :activity_id => create(:activity).id)
+    post :create, :audit => attributes_for(:audit, :activity_id => create(:activity).id, :start_date => Date.today.beginning_of_month.strftime('%m/%d/%Y'), :end_date => Date.today.end_of_month.strftime('%m/%d/%Y'))
 
     expect(Audit.count).to eq(1)
   end
