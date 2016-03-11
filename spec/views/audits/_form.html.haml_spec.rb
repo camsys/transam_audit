@@ -6,7 +6,9 @@ describe "audits/_form.html.haml", :type => :view do
     render
 
     expect(rendered).to have_field('audit_name')
-    expect(rendered).to have_field('audit_auditor_class_name')
+
+    # disabled class since no interactive audit creating
+    #expect(rendered).to have_field('audit_auditor_class_name')
     expect(rendered).to have_field('audit_activity_id')
     expect(rendered).to have_field('audit_schedule')
     expect(rendered).to have_field('audit_start_date')
