@@ -59,6 +59,36 @@ class AuditResult < ActiveRecord::Base
     FORM_PARAMS
   end
 
+  def self.search_auditable(audit_results_criteria, type=nil,audited_must_meet={}, audited_must_not_meet={})
+    # there are always conditions on audit results
+    # make keys .to_sym
+    audit_results_criteria = audit_results_criteria.symbolize_keys!
+
+    if type.nil? || (audited_must_meet.empty? and audited_must_not_meet.empty?)
+      return where(audit_results_criteria)
+    end
+
+    if audit_results_criteria[:auditable_type].blank?
+      audit_results_criteria[:auditable_type] = type
+    end
+
+    audited_table = type.downcase.pluralize
+
+    audit_results =
+      joins( "INNER JOIN `#{audited_table}` ON `audit_results`.`auditable_id` = `#{audited_table}`.`id`" )
+      .where( :audit_results => audit_results_criteria )
+
+    unless audited_must_meet.empty?
+      audit_results = audit_results.where( audited_table.to_sym => audited_must_meet )
+    end
+
+    unless audited_must_not_meet.empty?
+      audit_results = audit_results.where.not( audited_table.to_sym => audited_must_not_meet )
+    end
+
+    return audit_results
+  end
+
   #-----------------------------------------------------------------------------
   # Instance Methods
   #-----------------------------------------------------------------------------

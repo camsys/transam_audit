@@ -19,7 +19,7 @@
       - else
         - audits.each do |audit|
           %p.text-center= "<strong>#{audit.name} Results</strong>".html_safe
-          - audit_results = report.get_data audit, @organization_list
+          - audit_results = report.get_data(audit, @organization_list, 'Asset', {disposition_date: nil},{})
           %table.table.table-hover#asset_compliance
             %tbody
               - audit_results[1].each do |row|
