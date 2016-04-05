@@ -45,7 +45,7 @@ class AuditResultsController < OrganizationAwareController
     if @audit_result_type_filter.blank?
       @audit_result_type_filter = [AuditResultType::AUDIT_RESULT_FAILED]
     end
-    conditions[audit_result_type_id: @audit_result_type_filter]
+    conditions[:audit_result_type_id] = @audit_result_type_filter
 
     # get the audit results for this organization
     # hard coded to assets right now cause views are just for assets
