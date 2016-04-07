@@ -1,17 +1,4 @@
 .col-sm-12.col-md-10.col-md-offset-1
   .page-header
     %h2 Audit Results
-
-  .row
-    .col-sm-12
-      -if @audit_results[0].auditable_type === "Asset"
-        = render 'search_asset_form'
-
-  .row
-    .col-sm-12
-      - if @audit_results.empty?
-        %p No matching audit results found
-      - else
-        %p Found #{@audit_results.count} matching results
-        -if @audit_results[0].auditable_type === "Asset"
-          = render :partial => 'index_asset_table', :locals => {:audit_results => @audit_results}
+    = render "index_assets"

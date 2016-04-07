@@ -1,0 +1,11 @@
+.row
+  .col-sm-12
+    = render 'search_asset_form'
+
+.row
+  .col-sm-12
+    - if @audit_results.empty?
+      %p No matching audit results found
+    - else
+      %p Found #{@audit_results.count} matching results
+      = render :partial => 'index_asset_table', :locals => {:audit_results => @audit_results}
