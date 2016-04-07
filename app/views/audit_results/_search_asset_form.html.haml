@@ -1,0 +1,13 @@
+= form_tag audit_results_path, :id => 'filter_form', :method => "get", :class => 'navbar-form navbar-right panel-action' do
+  - if @organization_list.count > 1
+    .form-group
+      = select_tag(:org_filter, options_for_select(Organization.where('id IN (?)', @organization_list).collect{|a| [a.coded_name, a.id]}, :selected => @org_filter), :class => "form-control")
+  .form-group
+    = select_tag(:types_filter, options_for_select(@types, :selected => @types_filter), :class => "form-control")
+  .form-group
+    = select_tag(:audit_result_type_filter, options_for_select(AuditResultType.active.collect{|x| [x.name, x.id]}, :selected => @audit_result_type_filter), :class => "form-control")
+  .form-group
+    = select_tag(:audit_filter, options_for_select(Audit.active.collect{|x| [x.name, x.id]}, :selected => @audit_filter), :class => "form-control")
+
+  = button_tag :class => 'btn btn-default', :type => 'submit' do
+    %i.fa.fa-filter

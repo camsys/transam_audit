@@ -4,7 +4,8 @@
 
   .row
     .col-sm-12
-      = render 'search_form'
+      -if @audit_results[0].auditable_type === "Asset"
+        = render 'search_asset_form'
 
   .row
     .col-sm-12
@@ -12,4 +13,5 @@
         %p No matching audit results found
       - else
         %p Found #{@audit_results.count} matching results
-        = render :partial => 'index_table', :locals => {:audit_results => @audit_results}
+        -if @audit_results[0].auditable_type === "Asset"
+          = render :partial => 'index_asset_table', :locals => {:audit_results => @audit_results}
