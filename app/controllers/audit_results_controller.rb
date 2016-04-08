@@ -19,6 +19,12 @@ class AuditResultsController < OrganizationAwareController
 
     conditions = Hash.new
 
+    #check to see if we got an auditableType to sub select on. If not assume Asset since it is the primary auditableType
+    @auditable_type = params[:auditable_type]
+    if @auditable_type.blank?
+      @auditable_type = "Asset"
+    end
+
     # Check to see if we got an organization to sub select on.
     @org_filter = params[:org_filter]
     if @org_filter.blank?
@@ -49,7 +55,7 @@ class AuditResultsController < OrganizationAwareController
 
     # get the audit results for this organization
     # hard coded to assets right now cause views are just for assets
-    @audit_results = AuditResult.search_auditable(conditions, 'Asset', {disposition_date: nil})
+    @audit_results = AuditResult.search_auditable(conditions, @auditable_type, {disposition_date: nil})
 
     # cache the set of object keys in case we need them later
     #cache_list(@activities, INDEX_KEY_LIST_VAR)
