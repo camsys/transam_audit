@@ -14,4 +14,5 @@ gemspec
 # gem 'debugger'
 gem 'transam_core', :github => 'camsys/transam_core'
 gem 'mysql2', '~> 0.3.20' # lock gem for dummy app
+gem "capybara", '2.6.2' # lock gem for old capybara behavior on hidden element xpath
 gem 'sass-rails'
