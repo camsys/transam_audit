@@ -54,8 +54,7 @@ class AuditResultsController < OrganizationAwareController
     conditions[:audit_result_type_id] = @audit_result_type_filter
 
     # get the audit results for this organization
-    # hard coded to assets right now cause views are just for assets
-    @audit_results = AuditResult.search_auditable(conditions, @auditable_type, {disposition_date: nil})
+    @audit_results = "#{@auditable_type}AuditResultsListReport".constantize.new.get_data(conditions)
 
     # cache the set of object keys in case we need them later
     #cache_list(@activities, INDEX_KEY_LIST_VAR)
