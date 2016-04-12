@@ -28,6 +28,9 @@ class Audit < ActiveRecord::Base
   # Each audit belongs to an auditor activity
   belongs_to :activity
 
+  # Allow the form to submit grant purchases
+  accepts_nested_attributes_for :activity
+
   #-----------------------------------------------------------------------------
   # Validations
   #-----------------------------------------------------------------------------
@@ -64,7 +67,10 @@ class Audit < ActiveRecord::Base
   # Class Methods
   #-----------------------------------------------------------------------------
   def self.allowable_params
-    FORM_PARAMS
+    FORM_PARAMS +
+    [
+      :activity_attributes => [Activity.allowable_params]
+    ]
   end
 
   #-----------------------------------------------------------------------------
