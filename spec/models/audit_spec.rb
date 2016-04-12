@@ -27,10 +27,6 @@ RSpec.describe Audit, :type => :model do
       test_audit.auditor_class_name = nil
       expect(test_audit.valid?).to be false
     end
-    it 'must have a schedule' do
-      test_audit.schedule = nil
-      expect(test_audit.valid?).to be false
-    end
     it 'must have a start date' do
       test_audit.start_date = nil
       expect(test_audit.valid?).to be false
@@ -47,7 +43,6 @@ RSpec.describe Audit, :type => :model do
       :name,
       :description,
       :instructions,
-      :schedule,
       :start_date,
       :end_date,
       :auditor_class_name,

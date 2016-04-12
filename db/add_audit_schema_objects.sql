@@ -37,7 +37,6 @@ CREATE TABLE audits  (
 	name        	varchar(64) NOT NULL,
 	description 	text NOT NULL,
 	instructions	varchar(254) NOT NULL,
-	schedule    	varchar(64) NOT NULL,
 	auditor_class_name	varchar(128) NOT NULL,
 	last_run    	datetime NULL,
 	active      	tinyint(1) NOT NULL,

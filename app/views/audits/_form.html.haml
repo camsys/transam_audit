@@ -7,7 +7,7 @@
   :boolean => :vertical_boolean}) do |f|
 
   .row
-    .col-sm-6
+    .col-sm-9
       = f.input :name, :label => 'Name', :required => true, :wrapper_html => {:class => 'text-limiter-wrapper'}, :input_html => {:class => 'text-limiter', :maxlength => 64}
       %p.text-muted.text-limiter-counter
         %span#name-counter
@@ -16,12 +16,9 @@
     .col-sm-3
       = f.input :auditor_class_name, :required => true, :disabled => true, :label => 'Auditor'
 
-    .col-sm-3
-      = f.association :activity, :required => true
-
   .row
     .col-sm-3
-      = f.input :schedule, :collection => ['Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'], :include_blank => false
+      = f.association :activity, :required => true, :label => 'Schedule'
     .col-sm-3
       = f.input :start_date, :wrapper => :vertical_append, :label => "Start Date" do
         = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.start_date)
