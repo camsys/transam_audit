@@ -18,7 +18,6 @@
         %th.center{:data => {:sortable => 'true'}} Name
         %th.center{:data => {:sortable => 'true'}} Description
         %th.center{:data => {:sortable => 'true'}} Instructions
-        %th.center{:data => {:sortable => 'true'}} Activity
         %th.center{:data => {:sortable => 'true'}} Schedule
         %th.center{:data => {:sortable => 'true'}} Last Run
         %th.center{:data => {:sortable => 'true'}} Operational
@@ -32,7 +31,6 @@
           %td.left= format_as_text(a.description)
           %td.left= format_as_text(a.instructions)
           %td.left= link_to a.activity, activity_path(a.activity) if a.activity.present?
-          %td.left= format_as_text(a.schedule)
           %td.center.nowrap= format_as_date(a.last_run)
           %td.center= format_as_boolean(a.operational?)
           %td.center= format_as_boolean(a.active)
