@@ -29,7 +29,7 @@ class Audit < ActiveRecord::Base
   belongs_to :activity
 
   # Allow the form to submit grant purchases
-  accepts_nested_attributes_for :activity
+  accepts_nested_attributes_for :activity, update_only: true
 
   #-----------------------------------------------------------------------------
   # Validations
@@ -69,7 +69,13 @@ class Audit < ActiveRecord::Base
   def self.allowable_params
     FORM_PARAMS +
     [
-      :activity_attributes => [Activity.allowable_params]
+      :activity_attributes => [
+        :show_in_dashboard,
+        :start_date,
+        :end_date,
+        :frequency_type_id,
+        :active
+      ]
     ]
   end
 

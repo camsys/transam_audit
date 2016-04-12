@@ -1,12 +1,15 @@
 .hidden-md.hidden-sm.hidden-xs
   = format_field("Name", audit.name)
-  = format_field("Schedule", link_to(audit.activity, activity_path(audit.activity))) if audit.activity.present?
+  -# = format_field("Schedule", link_to(audit.activity, activity_path(audit.activity))) if audit.activity.present?
   = format_field("Auditor", audit.auditor_class_name)
   %hr
   = format_field("Active", format_as_boolean(audit.active))
+  = format_field("Reporting Start Date", format_as_date(audit.start_date))
+  = format_field("Reporting End Date", format_as_date(audit.end_date))
+  %hr
   = format_field("Operational", format_as_boolean(audit.operational?))
-  = format_field("Start Date", format_as_date(audit.start_date))
-  = format_field("End Date", format_as_date(audit.end_date))
+  = format_field("Schedule Start Date", format_as_date(audit.activity.start_date))
+  = format_field("Schedule End Date", format_as_date(audit.activity.end_date))
   %hr
   = format_field("Last Run", format_as_date(audit.last_run))
   = format_field("Created On", format_as_date(audit.created_at))

@@ -17,23 +17,6 @@
       = f.input :auditor_class_name, :required => true, :disabled => true, :label => 'Auditor'
 
   .row
-    .col-sm-3
-      = f.association :activity, :required => true, :label => 'Schedule'
-    .col-sm-3
-      = f.input :start_date, :wrapper => :vertical_append, :label => "Start Date" do
-        = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.start_date)
-        %span.input-group-addon
-          %i.fa.fa-calendar
-    .col-sm-3
-      = f.input :end_date, :wrapper => :vertical_append, :label => "End Date" do
-        = f.input_field :end_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.end_date)
-        %span.input-group-addon
-          %i.fa.fa-calendar
-
-    .col-sm-3
-      = f.input :active, :collection => [['No', false],['Yes', true]], :include_blank => false
-
-  .row
     .col-sm-12
       = f.input :description, :as => :text, :required => true, :wrapper_html => {:class => 'text-limiter-wrapper'}, :input_html => {:class => 'text-limiter', :rows => 6, :maxlength => 1024}
       %p.text-muted.text-limiter-counter
@@ -46,6 +29,23 @@
       %p.text-muted.text-limiter-counter
         %span#instructions-counter
         characters remaining.
+
+  .row
+    .col-sm-4
+      = f.input :start_date, :wrapper => :vertical_append, :label => "Reporting Start Date" do
+        = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.start_date)
+        %span.input-group-addon
+          %i.fa.fa-calendar
+    .col-sm-4
+      = f.input :end_date, :wrapper => :vertical_append, :label => "Reporting End Date" do
+        = f.input_field :end_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.end_date)
+        %span.input-group-addon
+          %i.fa.fa-calendar
+
+    .col-sm-4
+      = f.input :active, :collection => [['No', false],['Yes', true]], :include_blank => false
+
+  = render :partial => 'audit_activity_form', :locals => {:f => f}
 
   .row
     .col-sm-12
