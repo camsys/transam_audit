@@ -17,7 +17,7 @@
 .hidden-lg
   .col-sm-4
     = format_field("Name", audit.name)
-    = format_field("Activity", link_to(audit.activity, activity_path(audit.activity))) if audit.activity.present?
+    -# = format_field("Activity", link_to(audit.activity, activity_path(audit.activity))) if audit.activity.present?
     = format_field("Auditor", audit.auditor_class_name)
   .col-sm-4
     = format_field("Active", format_as_boolean(audit.active))
