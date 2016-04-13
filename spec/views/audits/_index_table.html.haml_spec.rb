@@ -9,6 +9,6 @@ describe "audits/_index_table.html.haml", :type => :view do
     expect(rendered).to have_link(test_audit.name)
     expect(rendered).to have_content(test_audit.description)
     expect(rendered).to have_content(test_audit.instructions)
-    expect(rendered).to have_link(test_audit.activity.to_s)
+    # expect(rendered).to have_link(test_audit.activity.to_s)
   end
 end

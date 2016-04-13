@@ -46,7 +46,8 @@ RSpec.describe Audit, :type => :model do
       :start_date,
       :end_date,
       :auditor_class_name,
-      :active
+      :active,
+      :activity_attributes=>[:show_in_dashboard, :start_date, :end_date, :frequency_type_id, :active]
     ])
   end
 

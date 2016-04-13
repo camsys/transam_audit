@@ -5,6 +5,7 @@ describe "audit_results/index.html.haml", :type => :view do
     assign(:organization_list, [create(:organization).id])
     assign(:types, ['Asset'])
     assign(:audit_results, [])
+    assign(:auditable_type, 'Asset')
     render
 
     expect(rendered).to have_content('No matching audit results found')
@@ -15,6 +16,7 @@ describe "audit_results/index.html.haml", :type => :view do
     assign(:audit_results, [create(:audit_result, :auditable => test_asset, :organization => test_asset.organization)])
     assign(:organization_list, [create(:organization).id])
     assign(:types, ['Asset'])
+    assign(:auditable_type, 'Asset')
     render
 
     expect(rendered).to have_content('Found 1 matching results')

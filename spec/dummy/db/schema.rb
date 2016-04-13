@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311140223) do
+ActiveRecord::Schema.define(version: 20160329181136) do
 
   create_table "activities", force: true do |t|
     t.string   "object_key",           limit: 12
@@ -337,7 +337,6 @@ ActiveRecord::Schema.define(version: 20160311140223) do
     t.string   "name",               limit: 64,  null: false
     t.text     "description",                    null: false
     t.string   "instructions",       limit: 254, null: false
-    t.string   "schedule",           limit: 64,  null: false
     t.date     "start_date",                     null: false
     t.date     "end_date",                       null: false
     t.string   "auditor_class_name", limit: 128, null: false

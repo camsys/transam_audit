@@ -6,7 +6,6 @@ describe "audits/_summary.html.haml", :type => :view do
     render 'audits/summary', :audit => test_audit
 
     expect(rendered).to have_content(test_audit.name)
-    expect(rendered).to have_link(test_audit.activity.to_s)
     expect(rendered).to have_content(test_audit.auditor_class_name)
   end
 end

@@ -136,8 +136,8 @@ class AuditsController < OrganizationAwareController
   def reformat_date_fields
     params[:audit][:start_date] = reformat_date(params[:audit][:start_date]) unless params[:audit][:start_date].blank?
     params[:audit][:end_date] = reformat_date(params[:audit][:end_date]) unless params[:audit][:end_date].blank?
-    params[:audit][:activity_attributes][:start_date] = reformat_date(params[:audit][:activity_attributes][:start_date]) unless params[:audit][:activity_attributes][:start_date].blank?
-    params[:audit][:activity_attributes][:end_date] = reformat_date(params[:audit][:activity_attributes][:end_date]) unless params[:audit][:activity_attributes][:end_date].blank?
+    params[:audit][:activity_attributes][:start_date] = reformat_date(params[:audit][:activity_attributes][:start_date]) unless params[:audit][:activity_attributes].blank? || params[:audit][:activity_attributes][:start_date].blank?
+    params[:audit][:activity_attributes][:end_date] = reformat_date(params[:audit][:activity_attributes][:end_date]) unless params[:audit][:activity_attributes].blank? || params[:audit][:activity_attributes][:end_date].blank?
   end
 
   def reformat_date(date_str)
