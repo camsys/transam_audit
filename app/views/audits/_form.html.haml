@@ -32,12 +32,12 @@
 
   .row
     .col-sm-4
-      = f.input :start_date, :wrapper => :vertical_append, :label => "Reporting Start Date" do
+      = f.input :start_date, :wrapper => :vertical_append, :label => "Data Update Start Date" do
         = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.start_date)
         %span.input-group-addon
           %i.fa.fa-calendar
     .col-sm-4
-      = f.input :end_date, :wrapper => :vertical_append, :label => "Reporting End Date" do
+      = f.input :end_date, :wrapper => :vertical_append, :label => "Data Update End Date" do
         = f.input_field :end_date, :as => :string, :class => 'form-control datepicker', :data => {'behavior' => 'datepicker'}, :value => format_as_date(f.object.end_date)
         %span.input-group-addon
           %i.fa.fa-calendar
