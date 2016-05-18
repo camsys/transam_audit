@@ -23,7 +23,7 @@ class AssetAuditor < AbstractAuditor
     ]
 
     asset_fields_audited.each do |field|
-      if a.changes.include? field.to_s
+      if asset.changes.include? field.to_s
         has_changes = true
         break
       end
