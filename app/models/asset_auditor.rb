@@ -17,12 +17,10 @@ class AssetAuditor < AbstractAuditor
         :reported_condition_type_id,
         :reported_condition_rating,
         :service_status_date,
-        :service_status_type_id
+        :service_status_type_id,
+        :reported_mileage,
+        :reported_mileage_date
     ]
-    if asset.respond_to? :mileage_updates
-      asset_fields_audited << :reported_mileage
-      asset_fields_audited << :reported_mileage_date
-    end
 
     asset_fields_audited.each do |field|
       if a.changes.include? field.to_s
