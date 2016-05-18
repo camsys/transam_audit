@@ -7,6 +7,32 @@
 class AssetAuditor < AbstractAuditor
 
   #-----------------------------------------------------------------------------
+  # Only run audit if asset has changes related to audit
+  #-----------------------------------------------------------------------------
+  def detect_changes? asset
+    has_changes = false
+
+    asset_fields_audited = [
+        :reported_condition_date,
+        :reported_condition_type_id,
+        :reported_condition_rating,
+        :service_status_date,
+        :service_status_type_id,
+        :reported_mileage,
+        :reported_mileage_date
+    ]
+
+    asset_fields_audited.each do |field|
+      if asset.changes.include? field.to_s
+        has_changes = true
+        break
+      end
+    end
+
+    has_changes
+  end
+
+  #-----------------------------------------------------------------------------
   # Takes set of properties and generates a list of assets that will be audited
   #-----------------------------------------------------------------------------
   def audit options={}

@@ -19,8 +19,15 @@ module TransamAuditable
     # ----------------------------------------------------
     # Call Backs
     # ----------------------------------------------------
+
+    # Run a check before saving to see if any of the asset fields audited are changed
+    before_save     :check_for_changes
+
     # Always check to see if the audit needs to be checked
-    after_save  :update_audits
+    after_save      :update_audits
+
+    # Set a local instance variable to determine if the audit needs to be updated
+    attr_accessor   :is_dirty
 
     # ----------------------------------------------------
     # Associations
@@ -60,15 +67,26 @@ module TransamAuditable
   #-----------------------------------------------------------------------------
   protected
 
+  def check_for_changes
+    Rails.logger.debug "checking for audit changes"
+    self.is_dirty = false
+    audits.each do |audit|
+      if audit.operational? and audit.auditor.detect_changes? self
+        self.is_dirty = true
+        break
+      end
+    end
+  end
+
   #-----------------------------------------------------------------------------
   # Each operational audit is re-run after a save event on the asset
   #-----------------------------------------------------------------------------
   def update_audits
-    Rails.logger.debug "In update_audits callback"
-    audits.each do |audit|
-      if audit.operational?
-        job = AssetAuditUpdateJob.new(audit, object_key)
-        Delayed::Job.enqueue job, :priority => 0
+    if self.is_dirty
+      Rails.logger.debug "In update_audits callback"
+      audits.each do |audit|
+          job = AssetAuditUpdateJob.new(audit, object_key)
+          Delayed::Job.enqueue job, :priority => 0
       end
     end
   end
