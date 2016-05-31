@@ -21,7 +21,7 @@ module TransamAuditable
     # ----------------------------------------------------
 
     # Run a check before saving to see if any of the asset fields audited are changed
-    before_save     :check_for_changes
+    before_save     :check_for_audit_changes
 
     # Always check to see if the audit needs to be checked
     after_save      :update_audits
@@ -67,7 +67,7 @@ module TransamAuditable
   #-----------------------------------------------------------------------------
   protected
 
-  def check_for_changes
+  def check_for_audit_changes
     Rails.logger.debug "checking for audit changes"
     self.has_audit_changes = false
     audits.each do |audit|
