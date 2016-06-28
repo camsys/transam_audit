@@ -76,6 +76,7 @@ module TransamAuditable
         break
       end
     end
+    return
   end
 
   #-----------------------------------------------------------------------------
