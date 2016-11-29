@@ -39,7 +39,9 @@
             %td.left.nowrap= a.organization.short_name
           %td.center.nowrap= a.audit
           %td.left.nowrap= a.class_name
-          %td.left.nowrap= link_to a.auditable.asset_tag, eval(a.path)
+          %td.left.nowrap
+            %span.hidden= a.auditable.asset_tag
+            = link_to a.auditable.asset_tag, eval(a.path)
           %td.left.nowrap= a.auditable.description
           %td.center.nowrap= a.audit_result_type
           %td.center.nowrap= format_as_date(a.updated_at)
