@@ -69,22 +69,25 @@ module TransamAuditable
 
   def check_for_audit_changes
     Rails.logger.debug "checking for audit changes"
-    self.has_audit_changes = false
+    audit_changed = false
+    Rails.logger.debug (Audit.first.operational? and Audit.first.auditor.detect_changes? self).to_s
     audits.each do |audit|
       if audit.operational? and audit.auditor.detect_changes? self
-        self.has_audit_changes = true
+        audit_changed = true
         break
       end
     end
-    return
+    self.has_audit_changes = audit_changed
+    return true
   end
 
   #-----------------------------------------------------------------------------
   # Each operational audit is re-run after a save event on the asset
   #-----------------------------------------------------------------------------
   def update_audits
+    Rails.logger.debug "In update_audits callback"
     if self.has_audit_changes
-      Rails.logger.debug "In update_audits callback"
+      Rails.logger.debug "adding audit job to queue there are changes"
       audits.each do |audit|
           job = AssetAuditUpdateJob.new(audit, object_key)
           Delayed::Job.enqueue job, :priority => 0

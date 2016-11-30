@@ -104,8 +104,16 @@ class AuditsController < OrganizationAwareController
     add_breadcrumb @audit, audit_path(@audit)
     add_breadcrumb "Update"
 
+    has_changes = @audit.detect_changes?
+
     respond_to do |format|
       if @audit.update(audit_params)
+
+        if has_changes
+          job = AuditUpdateJob.new(@audit, current_user)
+          Delayed::Job.enqueue job, :priority => 0
+        end
+
         notify_user :notice, 'Audit was successfully updated.'
         format.html { redirect_to @audit }
         format.json { render :show, status: :ok, location: @audit }
