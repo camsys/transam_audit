@@ -26,8 +26,8 @@
 
     %tbody
       - audits.each do |a|
-        %tr
-          %td.left.nowrap= link_to a.name, audit_path(a)
+        %tr{:id => a.object_key, :class => 'action-path'}
+          %td.left.nowrap= a.name
           %td.left= format_as_text(a.description)
           %td.left= format_as_text(a.instructions)
           -# %td.left= link_to a.activity, activity_path(a.activity) if a.activity.present?
@@ -36,4 +36,4 @@
           %td.center= format_as_boolean(a.active)
           %td.center.nowrap= format_as_date(a.updated_at)
 
-= render :partial => 'shared/table_scripts', :locals => {:table_id => table_dom_id, :path_pattern => activity_path("xxx")}
+= render :partial => 'shared/table_scripts', :locals => {:table_id => table_dom_id, :path_pattern => audit_path("xxx")}
