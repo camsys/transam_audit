@@ -70,7 +70,6 @@ module TransamAuditable
   def check_for_audit_changes
     Rails.logger.debug "checking for audit changes"
     audit_changed = false
-    Rails.logger.debug (Audit.first.operational? and Audit.first.auditor.detect_changes? self).to_s
     audits.each do |audit|
       if audit.operational? and audit.auditor.detect_changes? self
         audit_changed = true
