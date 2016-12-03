@@ -6,7 +6,7 @@ describe "audits/_index_table.html.haml", :type => :view do
     test_audit = create(:audit, :activity => create(:activity))
     render 'audits/index_table', :audits => [test_audit]
 
-    expect(rendered).to have_link(test_audit.name)
+    expect(rendered).to have_content(test_audit.name)
     expect(rendered).to have_content(test_audit.description)
     expect(rendered).to have_content(test_audit.instructions)
     # expect(rendered).to have_link(test_audit.activity.to_s)
