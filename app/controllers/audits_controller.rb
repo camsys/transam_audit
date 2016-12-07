@@ -85,6 +85,10 @@ class AuditsController < OrganizationAwareController
 
     respond_to do |format|
       if @audit.save
+
+        job = AuditUpdateJob.new(@audit, current_user)
+        Delayed::Job.enqueue job, :priority => 0
+
         notify_user :notice, 'Audit was successfully created.'
         format.html { redirect_to @audit }
         format.json { render :show, status: :created, location: @audit }
@@ -104,12 +108,10 @@ class AuditsController < OrganizationAwareController
     add_breadcrumb @audit, audit_path(@audit)
     add_breadcrumb "Update"
 
-    has_changes = @audit.detect_changes?
-
     respond_to do |format|
       if @audit.update(audit_params)
 
-        if has_changes
+        if (@audit.previous_changes.keys & ['start_date', 'end_date']).count > 0
           job = AuditUpdateJob.new(@audit, current_user)
           Delayed::Job.enqueue job, :priority => 0
         end

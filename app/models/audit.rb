@@ -70,6 +70,7 @@ class Audit < ActiveRecord::Base
     FORM_PARAMS +
     [
       :activity_attributes => [
+        :id,
         :show_in_dashboard,
         :start_date,
         :end_date,
@@ -98,24 +99,6 @@ class Audit < ActiveRecord::Base
     else
       false
     end
-  end
-
-  def detect_changes?
-    has_changes = false
-
-    trigger_fields = [
-        :start_date,
-        :end_date
-    ]
-
-    trigger_fields.each do |field|
-      if self.changes.include? field.to_s
-        has_changes = true
-        break
-      end
-    end
-
-    has_changes
   end
 
   #-----------------------------------------------------------------------------

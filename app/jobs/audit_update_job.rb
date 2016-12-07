@@ -8,6 +8,7 @@
 class AuditUpdateJob < Job
 
   attr_accessor :audit
+  attr_accessor :creator
 
   def run
 
@@ -28,7 +29,7 @@ class AuditUpdateJob < Job
     raise ArgumentError, "creator can't be blank " if creator.nil?
   end
 
-  def initialize(audit)
+  def initialize(audit, creator)
     super
     self.audit = audit
     self.creator = creator
