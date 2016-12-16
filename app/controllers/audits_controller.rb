@@ -116,7 +116,7 @@ class AuditsController < OrganizationAwareController
           Delayed::Job.enqueue job, :priority => 0
         end
 
-        notify_user :notice, 'Audit was successfully updated.'
+        notify_user :notice, 'Audit form has been saved.'
         format.html { redirect_to @audit }
         format.json { render :show, status: :ok, location: @audit }
       else
