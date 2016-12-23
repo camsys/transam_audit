@@ -6,7 +6,7 @@ describe "audit_results/_index_actions.html.haml", :type => :view do
     render
 
     FileContentType.all.each do |file_type|
-      expect(rendered).to have_link(file_type.name)
+      expect(rendered).to have_button(file_type.name)
     end
   end
 end
