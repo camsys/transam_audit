@@ -98,7 +98,12 @@ class AssetAuditor < AbstractAuditor
       audit_result.notes = ""
     end
     # save this update
-    audit_result.save
+    if audit_result.changed?
+      audit_result.save
+    else
+      # just update updated_at to show asset was audited again and results are still the same
+      audit_result.touch
+    end
 
   end
 
