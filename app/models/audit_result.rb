@@ -93,7 +93,7 @@ class AuditResult < ActiveRecord::Base
   # Instance Methods
   #-----------------------------------------------------------------------------
   def to_s
-    name
+    "#{auditable} #{audit_result_type}"
   end
 
   # Return the Rails path to this object
