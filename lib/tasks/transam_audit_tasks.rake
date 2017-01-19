@@ -2,7 +2,7 @@ namespace :transam_audit do
   desc "Prepare the dummy app for rspec and capybara"
   task :prepare_rspec => ["app:test:set_test_env", :environment] do
     %w(db:drop db:create db:schema:load db:migrate db:seed).each do |cmd|
-      Rails.logger.debug "Running #{cmd} in Core"
+      Rails.logger.debug "Running #{cmd} in Audit"
       Rails.logger.debug "ENV IS #{Rails.env}"
       Rake::Task[cmd].invoke
     end
@@ -18,7 +18,7 @@ namespace :transam_audit do
     sh 'git', 'checkout', '638dfbc', Rails.root.join('db', 'schema.rb').to_s
 
     %w(db:drop db:create db:schema:load db:migrate db:seed).each do |cmd|
-      puts "Running #{cmd} in Sign"
+      puts "Running #{cmd} in Audit"
       Rake::Task[cmd].invoke
     end
   end
