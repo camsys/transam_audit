@@ -19,7 +19,7 @@ RSpec.describe AuditResultsController, :type => :controller do
     expect(assigns(:org_filter)).to eq(subject.current_user.organization.id.to_s)
     expect(assigns(:types_filter)).to eq(['Asset'])
     expect(assigns(:audit_filter)).to eq(test_result.audit.id.to_s)
-    expect(assigns(:audit_result_type_filter)).to eq([2])
+    expect(assigns(:audit_result_type_filter)).to eq(2)
     expect(assigns(:audit_results)).to include(test_result)
     expect(assigns(:types)).to include(test_result.class_name)
   end
