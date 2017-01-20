@@ -1,7 +1,7 @@
 class AssetAuditResultsListReport < Report
   def get_data(conditions)
 
-    if conditions[:audit_result_type_id] == AuditResultType::AUDIT_RESULT_UNKNOWN
+    if conditions[:audit_result_type_id].to_i == AuditResultType::AUDIT_RESULT_UNKNOWN.to_i
       audit_results = []
 
       not_tested = Asset.operational.where(organization_id: conditions[:organization_id], asset_subtype_id: AssetType.find_by(name: conditions[:class_name]).asset_subtypes.ids).where.not(id: AuditResult.where(conditions.except(:audit_result_type_id)).pluck(:auditable_id))

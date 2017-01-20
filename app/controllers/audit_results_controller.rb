@@ -49,7 +49,7 @@ class AuditResultsController < OrganizationAwareController
 
     @audit_result_type_filter = params[:audit_result_type_filter]
     if @audit_result_type_filter.blank?
-      @audit_result_type_filter = [AuditResultType::AUDIT_RESULT_FAILED]
+      @audit_result_type_filter = AuditResultType::AUDIT_RESULT_FAILED
     end
     conditions[:audit_result_type_id] = @audit_result_type_filter
 
