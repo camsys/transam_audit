@@ -3,16 +3,16 @@
 
 - if audits.present?
   %li.divider
-
-- audits.each do |audit|
   %li.text-left
-    - type_filter = audit.audit_results.count > 0 ? audit.audit_results.first.class_name : ''
-    = link_to audit_results_path(:audit_filter => audit.id, :types_filter => type_filter, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED) do
+    = link_to audit_results_path, :style => 'font-weight:bold;' do
       %i.fa.fa-line-chart.fa-fw
-      = "#{audit.name} results"
+      = "All Audit Results"
 
-%li.divider
-%li.text-left
-  = link_to audit_results_path do
-    %i.fa.fa-line-chart.fa-fw
-    = "All audit results"
+
+  - audits.each do |audit|
+    %li.text-left.small
+      - type_filter = audit.audit_results.count > 0 ? audit.audit_results.first.class_name : ''
+      = link_to audit_results_path(:audit_filter => audit.id, :types_filter => type_filter, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED) do
+        %i.fa.fa-line-chart.fa-fw
+        = "#{audit.name} Results"
+
