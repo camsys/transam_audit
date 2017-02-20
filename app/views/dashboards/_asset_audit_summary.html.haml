@@ -24,7 +24,7 @@
             %tbody
               - audit_results[1].each do |row|
                 - org = Organization.find_by(:short_name => row[0])
-                %tr{:data => {:action_path => audit_results_path(:org_filter => [org.id], :types_filter => [row[1]], :audit_filter => audit.id, :audit_result_type_filter => [AuditResultType::AUDIT_RESULT_FAILED])}}
+                %tr{:data => {:action_path => audit_results_path(:org_filter => [org.id], :types_filter => [row[1]], :audit_filter => audit.id, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED)}}
                   %td.left= row[0] if @organization_list.length > 1
                   %td.left= row[1]
                   %td.right.col-sm-6
