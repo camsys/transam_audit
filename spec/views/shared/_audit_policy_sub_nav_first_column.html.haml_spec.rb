@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "shared/_audit_policy_sub_nav.html.haml", :type => :view do
+describe "shared/_audit_policy_sub_nav_first_column.html.haml", :type => :view do
   it 'single audit results' do
     test_audit = create(:audit)
     render
