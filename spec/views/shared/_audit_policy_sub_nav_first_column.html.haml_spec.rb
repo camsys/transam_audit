@@ -5,11 +5,11 @@ describe "shared/_audit_policy_sub_nav_first_column.html.haml", :type => :view d
     test_audit = create(:audit)
     render
 
-    expect(rendered).to have_link("#{test_audit.name} results")
+    expect(rendered).to have_link("#{test_audit.name} Results")
   end
   it 'all results' do
     render
 
-    expect(rendered).to have_link('All audit results')
+    expect(rendered).to have_link('All Audit Results')
   end
 end
