@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "dashboards/_asset_audit_summary.html.haml", :type => :view do
+describe "dashboards/_audit_widget.html.haml", :type => :view do
   it 'no audits' do
     Audit.destroy_all
     render
