@@ -21,7 +21,7 @@
         %th.center{:data => {:field => 'checked', :checkbox => 'true'}}
         %th.center{:data => {:field => 'object_key', :visible => 'false'}}
         - if @organization_list.count > 1
-          %th.center{:data => {:sortable => 'true'}} Org
+          %th.center{:data => {:field => 'org', :sortable => 'true'}} Org
         %th.center{:data => {:sortable => 'true'}} Audit
         %th.center{:data => {:field => 'object_type', :sortable => 'true'}} Type
         %th.center{:data => {:sortable => 'true'}} Asset Tag
@@ -109,7 +109,7 @@
     for (i = 0; i < selected.length; i++) {
       //console.log(selected[i]);
       selected_rows.add(selected[i].object_key);
-      selected_states.add(selected[i].object_type.toLowerCase().replace(/ /g, "_"));
+      selected_states.add(selected[i].org+"_"+selected[i].object_type.toLowerCase().replace(/ /g, "_"));
     }
     //console.log(selected_rows);
     enable_disable_table_actions();

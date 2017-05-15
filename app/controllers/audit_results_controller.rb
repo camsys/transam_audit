@@ -25,12 +25,7 @@ class AuditResultsController < OrganizationAwareController
       @auditable_type = "Asset"
     end
 
-    # Check to see if we got an organization to sub select on.
-    @org_filter = params[:org_filter]
-    if @org_filter.blank?
-      @org_filter = [@organization_list.first]
-    end
-    conditions[:organization_id] = @org_filter
+    conditions[:organization_id] = @organization_list
 
     # Check to see if we got type to select on
     @types_filter = params[:types_filter]
