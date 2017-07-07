@@ -41,7 +41,7 @@ class AssetAuditor < AbstractAuditor
     Organization.all.each do |org|
       # Only process operational assets
       write_to_activity_log org, "Performing #{context.name} on asset inventory"
-      Asset.operational.where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
+      Asset.operational.where('in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Asset.find_by(object_key: obj_key)
         update_status asset, context.start_date, context.end_date
       end

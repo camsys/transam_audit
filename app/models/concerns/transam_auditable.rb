@@ -71,7 +71,7 @@ module TransamAuditable
     Rails.logger.debug "checking for audit changes"
     audit_changed = false
     audits.each do |audit|
-      if audit.operational? and audit.auditor.detect_changes? self
+      if self.in_service_date <= audit.end_date && audit.operational? and audit.auditor.detect_changes? self
         audit_changed = true
         break
       end
