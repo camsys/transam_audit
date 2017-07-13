@@ -20,6 +20,14 @@ audit_result_types = [
   {:name => 'Untested', :description => 'One or more audit tests were not completed', :active => true}
 ]
 
+activities = [
+    {:name => 'Annual Inventory Asset Update', :description => 'All assets need to have the <strong>Service Status</strong>, <strong>Condition</strong>, and <strong>Mileage</strong> properties updated each quarter. Contact your BPT Technical manager for more information.', :job_name => 'AuditRunnerJob', :frequency_quantity => 1, :frequency_type_id => 4, :execution_time => 'Monday 00:01', :show_in_dashboard => true, :active => true, :start_date => Date.new(2015,10,1), :end_date => Date.new(2016,2,29)}
+]
+
+audits = [
+    {:belongs_to => 'activity', :activity => 'Annual Inventory Asset Update', :name => 'Annual Inventory Update', :auditor_class_name => 'AssetAuditor', :active => true, :description => 'Checks to see that each asset has had the <strong>Service Status</strong>, <strong>Condition</strong>, and <strong>Mileage</strong> (where appropriate) updated each quarter.', :instructions => 'Update the Service Status, Condition, and Mileage (where appropriate) values for each of the operational assets in your inventory each quarter.', :start_date => Date.new(2016,1,1), :end_date => Date.new(2016,3,31)}
+]
+
 lookup_tables = %w{ audit_result_types }
 
 lookup_tables.each do |table_name|
@@ -49,7 +57,7 @@ end
 
 puts "======= Processing TransAM Audit Merge Tables  ======="
 
-merge_tables = %w{ }
+merge_tables = %w{ activities audits }
 
 merge_tables.each do |table_name|
   puts "  Merging #{table_name}"
