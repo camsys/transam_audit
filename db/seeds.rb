@@ -57,16 +57,32 @@ end
 
 puts "======= Processing TransAM Audit Merge Tables  ======="
 
-merge_tables = %w{ activities audits }
+merge_tables = %w{ activities }
 
 merge_tables.each do |table_name|
   puts "  Merging #{table_name}"
   data = eval(table_name)
   klass = table_name.classify.constantize
   data.each do |row|
-    x = klass.new(row)
+    x = klass.new(row.except(:belongs_to, :type))
     x.save!
   end
+end
+
+table_name = 'audits'
+puts "  Loading #{table_name}"
+if is_mysql
+  ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{table_name};")
+elsif is_sqlite
+  ActiveRecord::Base.connection.execute("DELETE FROM #{table_name};")
+else
+  ActiveRecord::Base.connection.execute("TRUNCATE #{table_name} RESTART IDENTITY;")
+end
+data = eval(table_name)
+data.each do |row|
+  x = Audit.new(row.except(:belongs_to, :activity))
+  x.activity = Activity.find_by(:name => row[:activity])
+  x.save!
 end
 
 puts "======= Processing TransAM Audit Reports  ======="
