@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AssetAuditUpdateJob, :type => :job do
 
   let(:test_audit) { create(:audit) }
-  let(:test_asset) { create(:buslike_asset) }
+  let(:test_asset) { create(:buslike_asset, :service_status_type_id => 1) }
 
   it '.run' do
     Audit.destroy_all

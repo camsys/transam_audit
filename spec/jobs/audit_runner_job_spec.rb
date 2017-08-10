@@ -6,7 +6,7 @@ RSpec.describe AuditRunnerJob, :type => :job do
 
   it '.run' do
     AuditResult.destroy_all
-    test_asset = create(:buslike_asset)
+    test_asset = create(:buslike_asset, :service_status_type_id => 1)
     test_audit = create(:audit, :activity => test_activity)
     AuditRunnerJob.new({:context => test_activity}).run
 

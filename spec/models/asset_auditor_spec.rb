@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AssetAuditor do
 
-  let(:test_asset) { create(:buslike_asset) }
+  let(:test_asset) { create(:buslike_asset, :service_status_type_id => 1) }
   let(:test_audit) { create(:audit) }
 
   before(:each) do
