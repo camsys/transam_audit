@@ -71,20 +71,22 @@ class AssetAuditor < AbstractAuditor
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance between #{start_date} and #{end_date}. Type is #{asset.class.name}"
 
     passed = true
-    if asset.condition_updates.where(:event_date => start_date..end_date).count == 0
-      passed = false
-      errors << "Condition has not been updated during the audit period"
-    end
-
-    if asset.service_status_updates.where(:event_date => start_date..end_date).count == 0
-      passed = false
-      errors << "Service Status has not been updated during the audit period"
-    end
-
-    if asset.respond_to? :mileage_updates
-      if asset.mileage_updates.where(:event_date => start_date..end_date).count == 0
+    if asset.service_status_type.name != "Out of Service" || (start_date <= asset.service_status_date && asset.service_status_date <= end_date)
+      if asset.condition_updates.where(:event_date => start_date..end_date).count == 0
         passed = false
-        errors << "Mileage has not been updated during the audit period"
+        errors << "Condition has not been updated during the audit period"
+      end
+
+      if asset.service_status_updates.where(:event_date => start_date..end_date).count == 0
+        passed = false
+        errors << "Service Status has not been updated during the audit period"
+      end
+
+      if asset.respond_to? :mileage_updates
+        if asset.mileage_updates.where(:event_date => start_date..end_date).count == 0
+          passed = false
+          errors << "Mileage has not been updated during the audit period"
+        end
       end
     end
 
