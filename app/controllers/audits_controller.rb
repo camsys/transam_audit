@@ -111,7 +111,7 @@ class AuditsController < OrganizationAwareController
     respond_to do |format|
       if @audit.update(audit_params)
 
-        if (@audit.previous_changes.keys & ['start_date', 'end_date']).count > 0
+        if (@audit.previous_changes.keys & ['start_date', 'end_date']).count > 0 || (@audit.activity.previous_changes.keys & ['start_date', 'end_date']).count > 0
           job = AuditUpdateJob.new(@audit, current_user)
           Delayed::Job.enqueue job, :priority => 0
         end

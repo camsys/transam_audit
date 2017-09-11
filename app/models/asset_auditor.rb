@@ -71,7 +71,7 @@ class AssetAuditor < AbstractAuditor
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance between #{start_date} and #{end_date}. Type is #{asset.class.name}"
 
     passed = true
-    if asset.service_status_type.name != "Out of Service" || (start_date <= asset.service_status_date && asset.service_status_date <= end_date)
+    if asset.service_status_type.try(:name) != "Out of Service" || (asset.service_status_date.present? && start_date <= asset.service_status_date && asset.service_status_date <= end_date)
       if asset.condition_updates.where(:event_date => start_date..end_date).count == 0
         passed = false
         errors << "Condition has not been updated during the audit period"

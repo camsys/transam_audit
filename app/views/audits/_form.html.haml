@@ -87,7 +87,7 @@
 
   $('.audit_form').validate({
     submitHandler: function(form) {
-      if ($('#old_start_date').val() != $('#audit_start_date').val() || $('#old_end_date').val() != $('#audit_end_date').val()) {
+      if ($('#old_start_date').val() != $('#audit_start_date').val() || $('#old_end_date').val() != $('#audit_end_date').val() || $('#old_activity_start_date').val() != $('#audit_activity_attributes_start_date').val() || $('#old_activity_end_date').val() != $('#audit_activity_attributes_end_date').val()) {
         bootbox.confirm('Are you sure you want to update the audit? If so, the system will run the audit against all CPT data and notify you when the process is complete.', function(confirmed) {
           if(confirmed) {
             form.submit();

@@ -3,11 +3,13 @@
     = i_f.input :id, :as => :hidden
     .row
       .col-sm-3
+        = hidden_field_tag(:old_activity_start_date, format_as_date(i_f.object.start_date))
         = i_f.input :start_date, :label => 'Audit Activity Start Date', :wrapper => :vertical_append do
           = i_f.input_field :start_date, :class => "form-control", :as => :string, :data => {'behavior' => 'datepicker'}, :value => format_as_date(i_f.object.start_date)
           %span.input-group-addon
             %i.fa.fa-calendar
       .col-sm-3
+        = hidden_field_tag(:old_activity_end_date, format_as_date(i_f.object.end_date))
         = i_f.input :end_date, :label => 'Audit Activity End Date', :wrapper => :vertical_append do
           = i_f.input_field :end_date, :class => "form-control", :as => :string, :data => {'behavior' => 'datepicker'}, :value => format_as_date(i_f.object.end_date)
           %span.input-group-addon
