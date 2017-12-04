@@ -21,7 +21,7 @@ RSpec.describe AbstractAuditor do
 
     expect(ActivityLog.last.item_type).to eq('AbstractAuditor')
     expect(ActivityLog.last.organization).to eq(test_org)
-    expect(ActivityLog.last.activity).to eq(test_activity.id.to_s)
+    expect(ActivityLog.last.activity).to eq(test_activity.to_s)
     expect(ActivityLog.last.activity_time).to eq(test_time)
     expect(ActivityLog.last.user).to eq(sys_user)
   end
