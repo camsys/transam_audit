@@ -14,9 +14,7 @@
           = i_f.input_field :end_date, :class => "form-control", :as => :string, :data => {'behavior' => 'datepicker'}, :value => format_as_date(i_f.object.end_date)
           %span.input-group-addon
             %i.fa.fa-calendar
-      .col-sm-2
-        = i_f.input :frequency_type_id, :collection => FrequencyType.active.map{|f| [f.description, f.id]}, :include_blank => false
-      .col-sm-2
+      .col-sm-3
         = i_f.input :show_in_dashboard, :collection => [['No', false],['Yes', true]], :include_blank => false
-      .col-sm-2
+      .col-sm-3
         = i_f.input :active, :collection => [['No', false],['Yes', true]], :include_blank => false
