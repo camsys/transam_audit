@@ -88,7 +88,7 @@ module TransamAuditable
     if self.has_audit_changes
       Rails.logger.debug "adding audit job to queue there are changes"
       audits.each do |audit|
-          job = AssetAuditUpdateJob.new(audit, object_key)
+          job = AuditableUpdateJob.new(audit,self)
           Delayed::Job.enqueue job, :priority => 0
       end
     end

@@ -28,6 +28,23 @@ audits = [
     {:belongs_to => 'activity', :activity => 'Annual Inventory Asset Update', :name => 'Annual Inventory Update', :auditor_class_name => 'AssetAuditor', :active => true, :description => 'Checks to see that each asset has had the <strong>Service Status</strong>, <strong>Condition</strong>, and <strong>Mileage</strong> (where appropriate) updated each quarter.', :instructions => 'Update the Service Status, Condition, and Mileage (where appropriate) values for each of the operational assets in your inventory each quarter.', :start_date => Date.new(2016,1,1), :end_date => Date.new(2016,3,31)}
 ]
 
+# currently add auditable mixin to old assets as well
+system_config_extensions = [
+    {class_name: 'Equipment', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'Vehicle', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'Locomotive', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'RailCar', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'SupportVehicle', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'TransitFacility', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'SupportFacility', extension_name: 'TransamAuditable', active: true},
+
+    {class_name: 'CapitalEquipment', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'FacilityComponent', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'ServiceVehicle', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'RevenueVehicle', extension_name: 'TransamAuditable', active: true},
+    {class_name: 'Facility', extension_name: 'TransamAuditable', active: true},
+]
+
 lookup_tables = %w{ audit_result_types }
 
 lookup_tables.each do |table_name|
@@ -57,7 +74,7 @@ end
 
 puts "======= Processing TransAM Audit Merge Tables  ======="
 
-merge_tables = %w{ activities }
+merge_tables = %w{ activities system_config_extensions }
 
 merge_tables.each do |table_name|
   puts "  Merging #{table_name}"

@@ -1,36 +1,37 @@
 #------------------------------------------------------------------------------
 #
-# AssetAuditUpdateJob
+# AuditableUpdateJob
 #
 # This job is usally created after an auditable asset has been updated and it
 # simply runs each operational audit on the asset to update the audit results
 #
 #------------------------------------------------------------------------------
-class AssetAuditUpdateJob < AbstractAssetUpdateJob
+class AuditableUpdateJob < Job
 
   attr_accessor :audit
+  attr_accessor :auditable
 
-  def execute_job(asset)
-
-    asset.audits.each do |audit|
-      if audit.operational?
-        audit.auditor.update_status asset, audit.start_date, audit.end_date
-      end
+  def run
+    if audit.operational?
+      audit.auditor.update_status auditable, audit.start_date, audit.end_date
     end
   end
 
   def check
     super
     raise ArgumentError, "audit can't be blank " if audit.blank?
+    raise ArgumentError, "auditable can't be blank " if auditable.blank?
   end
 
   def prepare
-    Rails.logger.debug "Executing AssetAuditUpdateJob at #{Time.now.to_s} for Audit #{audit} and Asset #{object_key}"
+    Rails.logger.debug "Executing AuditableUpdateJob at #{Time.now.to_s} for Audit #{audit} and Auditable #{auditable}"
   end
 
-  def initialize(audit, object_key)
-    super(object_key)
+
+
+  def initialize(audit, auditable)
     self.audit = audit
+    self.auditable = auditable
   end
 
 end
