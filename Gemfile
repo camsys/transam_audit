@@ -16,6 +16,7 @@ gem 'transam_core', git: 'https://github.com/camsys/transam_core', branch: :quar
 gem 'mysql2', "~> 0.5.1" # lock gem for dummy app
 gem "capybara", '2.6.2' # lock gem for old capybara behavior on hidden element xpath
 gem 'sass-rails'
+gem 'rails-controller-testing'
 
 # This gem allows us to share githooks. Githooks in the .hooks folder can be checked
 # in, and when "bundle install" is run this gem automatically creates symlinks into

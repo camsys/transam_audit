@@ -13,8 +13,9 @@ RSpec.describe AssetAuditor do
 
   describe '.update_status' do
     it 'no asset' do
+      asset_auditor = AssetAuditor.new(test_audit)
       expect(Rails.logger).to receive(:debug).with("Asset cannot be nil")
-      AssetAuditor.new(test_audit).send(:update_status, nil, test_audit.start_date, test_audit.end_date)
+      asset_auditor.update_status(nil, test_audit.start_date, test_audit.end_date)
     end
     it 'disposed asset' do
       test_asset.update!(:disposition_date => Date.today)
