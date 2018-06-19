@@ -5,7 +5,7 @@ RSpec.describe AuditsController, :type => :controller do
   let(:test_audit) { create(:audit) }
 
   before(:each) do
-    sign_in FactoryGirl.create(:admin)
+    sign_in FactoryBot.create(:admin)
   end
 
   it 'GET index' do
