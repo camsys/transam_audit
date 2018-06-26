@@ -53,7 +53,6 @@ class AssetAuditor < AbstractAuditor
   # audit table wth the results
   #-----------------------------------------------------------------------------
   def update_status a, start_date, end_date
-
     errors = []
     if a.nil?
       Rails.logger.debug "Asset cannot be nil"
