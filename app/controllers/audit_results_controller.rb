@@ -20,9 +20,10 @@ class AuditResultsController < OrganizationAwareController
     conditions = Hash.new
 
     #check to see if we got an auditableType to sub select on. If not assume Asset since it is the primary auditableType
-    @auditable_type = params[:auditable_type]
+    @auditable_type = "TransamAsset" #params[:auditable_type]
+
     if @auditable_type.blank?
-      @auditable_type = "Asset"
+      @auditable_type = "TransamAsset"
     end
 
     conditions[:organization_id] = @organization_list
@@ -49,6 +50,7 @@ class AuditResultsController < OrganizationAwareController
     conditions[:audit_result_type_id] = @audit_result_type_filter
 
     # get the audit results for this organization
+    conditions[:auditable_type] = "TransamAsset"
     @audit_results = "#{@auditable_type}AuditResultsListReport".constantize.new.get_data(conditions)
 
     # cache the set of object keys in case we need them later

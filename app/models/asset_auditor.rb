@@ -41,8 +41,8 @@ class AssetAuditor < AbstractAuditor
     Organization.all.each do |org|
       # Only process operational assets
       write_to_activity_log org, "Performing #{context.name} on asset inventory"
-      Asset.operational.where('in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
-        asset = Asset.find_by(object_key: obj_key)
+      TransamAsset.operational.where('in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
+        asset = TransamAsset.find_by(object_key: obj_key)
         update_status asset, context.start_date, context.end_date
       end
     end
@@ -65,7 +65,7 @@ class AssetAuditor < AbstractAuditor
     end
 
     # Strongly type the asset but only if we need to
-    asset = a.is_typed? ? a : Asset.get_typed_asset(a)
+    asset = a.very_specific  #a.is_typed? ? a : Asset.get_typed_asset(a)
 
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance between #{start_date} and #{end_date}. Type is #{asset.class.name}"
 
@@ -82,6 +82,8 @@ class AssetAuditor < AbstractAuditor
       end
 
       if asset.respond_to? :mileage_updates
+
+        puts
         if asset.mileage_updates.where(:event_date => start_date..end_date).count == 0
           passed = false
           errors << "Mileage has not been updated during the audit period"
@@ -91,7 +93,7 @@ class AssetAuditor < AbstractAuditor
 
     # If this audit result doesn't exist create it then update it otherwise
     # find the existing one and update it
-    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'Asset', :audit_id => context.id, :class_name => asset.asset_type.name)
+    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => 'TransamAsset', :audit_id => context.id, :class_name => asset.asset_type.name)
     audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
     if errors.present?
       audit_result.notes = errors.join("\n")
