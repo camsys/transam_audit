@@ -82,8 +82,6 @@ class AssetAuditor < AbstractAuditor
       end
 
       if asset.respond_to? :mileage_updates
-
-        puts
         if asset.mileage_updates.where(:event_date => start_date..end_date).count == 0
           passed = false
           errors << "Mileage has not been updated during the audit period"

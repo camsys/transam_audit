@@ -9,7 +9,7 @@ class TransamAssetAuditResultsListReport < Report
         audit_results << AuditResult.new(auditable: no_audit_obj, organization_id: no_audit_obj.organization_id)
       end
     else
-      audit_results = AuditResult.search_auditable(conditions, 'Asset', {disposition_date: nil})
+      audit_results = AuditResult.search_auditable(conditions, 'TransamAsset', {disposition_date: nil})
     end
 
     return audit_results

@@ -15,9 +15,9 @@ RSpec.describe AuditResultsController, :type => :controller do
     test_result = create(:audit_result, :auditable => test_asset, :audit_result_type_id => 2, :organization => test_asset.organization)
 
 
-    get :index, params: {:types_filter => ['Asset'], :audit_filter => test_result.audit.id}
+    get :index, params: {:types_filter => ['TransamAsset'], :audit_filter => test_result.audit.id}
 
-    expect(assigns(:types_filter)).to eq(['Asset'])
+    expect(assigns(:types_filter)).to eq(['TransamAsset'])
     expect(assigns(:audit_filter)).to eq(test_result.audit.id.to_s)
     expect(assigns(:audit_result_type_filter)).to eq(2)
     expect(assigns(:audit_results)).to include(test_result)
