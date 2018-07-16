@@ -33,7 +33,7 @@ system_config_extensions = [
     {class_name: 'TransamAsset', extension_name: 'TransamAuditable', active: true}
 ]
 
-lookup_tables = %w{ audit_result_types }
+lookup_tables = %w{ audit_result_types system_config_extensions }
 
 lookup_tables.each do |table_name|
   puts "  Loading #{table_name}"
