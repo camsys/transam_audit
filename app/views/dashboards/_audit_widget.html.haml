@@ -20,7 +20,7 @@
       - org_data = Organization.where(id: @organization_list).pluck(:short_name, :id).to_h
       - audits.each do |audit|
         %p.text-center= "<strong>#{audit.name} Results</strong>".html_safe
-        - audit_results = report.get_data(audit, @organization_list, 'TransamAsset', {disposition_date: nil},{})
+        - audit_results = report.get_data(audit, @organization_list, Rails.application.config.asset_base_class_name, {disposition_date: nil},{})
         %table.table.table-hover#asset_compliance
           %tbody
             - audit_results[1].each do |row|

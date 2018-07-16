@@ -23,7 +23,7 @@ class AuditResultsController < OrganizationAwareController
     @auditable_type = params[:auditable_type]
 
     if @auditable_type.blank?
-      @auditable_type = "TransamAsset"
+      @auditable_type = Rails.application.config.asset_base_class_name
     end
 
     # Filter by Organizaiton
