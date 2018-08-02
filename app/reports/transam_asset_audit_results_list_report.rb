@@ -1,0 +1,3 @@
+class TransamAssetAuditResultsListReport < AssetBaseAuditResultsListReport
+
+end
