@@ -36,7 +36,6 @@ class AssetAuditor < AbstractAuditor
   # Takes set of properties and generates a list of assets that will be audited
   #-----------------------------------------------------------------------------
   def audit options={}
-
     # Loop through each org at a time
     Organization.all.each do |org|
       # Only process operational assets
@@ -65,7 +64,7 @@ class AssetAuditor < AbstractAuditor
     end
 
     # Strongly type the asset but only if we need to
-    asset = Asset.get_typed_asset(a)
+    asset = Rails.application.config.asset_base_class_name.constantize.get_typed_asset(a)
 
     Rails.logger.debug "Testing asset #{asset.object_key} for compliance between #{start_date} and #{end_date}. Type is #{asset.class.name}"
 
@@ -91,7 +90,7 @@ class AssetAuditor < AbstractAuditor
 
     # If this audit result doesn't exist create it then update it otherwise
     # find the existing one and update it
-    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :class_name => asset.asset_type.name)
+    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => asset.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :fta_asset_category => asset.fta_asset_category)
     audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
     if errors.present?
       audit_result.notes = errors.join("\n")

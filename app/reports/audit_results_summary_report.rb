@@ -7,6 +7,7 @@ class AuditResultsSummaryReport < AbstractReport
   def get_data(audit, organization_id_list, type, audited_must_meet, audited_must_not_meet)
     labels = ["Org", "Type", 'Total', "Passed", "Failed"]
     data = []
+
     Rails.logger.debug "Org Ids = #{organization_id_list}"
 
     # Process each org in turn

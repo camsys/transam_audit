@@ -4,7 +4,8 @@ class AssetBaseAuditResultsListReport < Report
     if conditions[:audit_result_type_id].to_i == AuditResultType::AUDIT_RESULT_UNKNOWN.to_i
       audit_results = []
 
-      not_tested = Rails.application.config.asset_base_class_name.constantize.operational.where(organization_id: conditions[:organization_id], asset_subtype_id: AssetType.find_by(name: conditions[:class_name]).asset_subtypes.ids).where.not(id: AuditResult.where(conditions.except(:audit_result_type_id)).pluck(:auditable_id))
+      not_tested = TransitAsset.operational.where(organization_id: conditions[:organization_id], fta_asset_category_id: conditions[:fta_asset_category_id]).where.not(id: AuditResult.where(conditions.except(:audit_result_type_id)).pluck(:auditable_id))
+      
       not_tested.each do |no_audit_obj|
         audit_results << AuditResult.new(auditable: no_audit_obj, organization_id: no_audit_obj.organization_id)
       end

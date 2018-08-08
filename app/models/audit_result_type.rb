@@ -18,7 +18,7 @@ class AuditResultType < ActiveRecord::Base
   end
 
   def to_s
-    name
+    name.titleize
   end
 
 end
