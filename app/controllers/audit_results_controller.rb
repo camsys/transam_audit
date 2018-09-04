@@ -27,7 +27,7 @@ class AuditResultsController < OrganizationAwareController
     end
 
     # Filter by Organizaiton
-    conditions[:organization_id] = @organization_list
+    conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
 
     # Check to see if we got type to select on
     # @types_filter = params[:types_filter]
