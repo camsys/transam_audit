@@ -35,20 +35,21 @@
 
     %tbody
       - audit_results.each do |a|
-        %tr
-          %td
-          %td.center.nowrap= a.auditable.object_key
-          - if @organization_list.count > 1
-            %td.left.nowrap= a.organization.short_name
-          %td.center.nowrap= a.audit
-          %td.left.nowrap= a.class_name
-          %td.left.nowrap
-            %span.hidden= a.auditable.asset_tag
-            = link_to a.auditable.asset_tag, eval(a.path)
-          %td.left.nowrap= a.auditable.description
-          %td.center.nowrap= a.audit_result_type
-          %td.center.nowrap= format_as_date(a.updated_at)
-          %td.left= format_as_text(a.notes)
+        -unless a.auditable.nil? #Don't show results for objects that have been deleted
+          %tr
+            %td
+            %td.center.nowrap= a.auditable.object_key
+            - if @organization_list.count > 1
+              %td.left.nowrap= a.organization.short_name
+            %td.center.nowrap= a.audit
+            %td.left.nowrap= a.class_name
+            %td.left.nowrap
+              %span.hidden= a.auditable.asset_tag
+              = link_to a.auditable.asset_tag, inventory_path(a.auditable)
+            %td.left.nowrap= a.auditable.description
+            %td.center.nowrap= a.audit_result_type
+            %td.center.nowrap= format_as_date(a.updated_at)
+            %td.left= format_as_text(a.notes)
 
 = render :partial => 'shared/table_scripts', :locals => {:table_id => 'audit_results_table', :path_pattern => activity_path("xxx")}
 

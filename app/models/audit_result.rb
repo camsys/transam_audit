@@ -33,6 +33,8 @@ class AuditResult < ActiveRecord::Base
   # Each audit result has a status type
   belongs_to :audit_result_type
 
+  belongs_to :fta_asset_category
+
   #-----------------------------------------------------------------------------
   # Validations
   #-----------------------------------------------------------------------------
@@ -72,7 +74,7 @@ class AuditResult < ActiveRecord::Base
       audit_results_criteria[:auditable_type] = type
     end
 
-    audited_table = type.downcase.pluralize
+    audited_table = type.underscore.pluralize
 
     audit_results =
       joins( "INNER JOIN `#{audited_table}` ON `audit_results`.`auditable_id` = `#{audited_table}`.`id`" )

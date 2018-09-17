@@ -15,7 +15,7 @@ FactoryBot.define do
     created_by_id 1
   end
 
-  factory :buslike_asset, :class => :asset do # An untyped asset which looks like a bus
+  factory :buslike_asset, :class => :transam_asset do # An untyped asset which looks like a bus
     basic_asset_attributes
     association :asset_type
     association :asset_subtype

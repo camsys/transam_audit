@@ -15,24 +15,34 @@ class AuditResultsController < OrganizationAwareController
     add_breadcrumb "Audit Results"
 
     # Get the list of audit types for this organization
-    @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
+    # @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
+    @fta_asset_categories = AuditResult.where(:organization_id => @organization_list).pluck(:fta_asset_category_id).uniq
 
     conditions = Hash.new
 
     #check to see if we got an auditableType to sub select on. If not assume Asset since it is the primary auditableType
     @auditable_type = params[:auditable_type]
     if @auditable_type.blank?
-      @auditable_type = "Asset"
+      @auditable_type = Rails.application.config.asset_base_class_name
     end
 
-    conditions[:organization_id] = @organization_list
+    # Filter by Organizaiton
+    conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
 
     # Check to see if we got type to select on
-    @types_filter = params[:types_filter]
-    if @types_filter.blank?
-      @types_filter = [@types.first]
+    # @types_filter = params[:types_filter]
+    # if @types_filter.blank?
+    #  @types_filter = [@types.first]
+    # end
+    #conditions[:class_name] = @types_filter
+
+
+    # Check to see if we got type to select on
+    @fta_asset_category_filter = params[:fta_asset_category_filter]
+    if @fta_asset_category_filter.blank?
+      @fta_asset_category_filter = [@fta_asset_categories.first]
     end
-    conditions[:class_name] = @types_filter
+    conditions[:fta_asset_category_id] = @fta_asset_category_filter
 
     # Check to see if we got an audit to sub select on.
     @audit_filter = params[:audit_filter]
@@ -47,7 +57,8 @@ class AuditResultsController < OrganizationAwareController
       @audit_result_type_filter = AuditResultType::AUDIT_RESULT_FAILED
     end
     conditions[:audit_result_type_id] = @audit_result_type_filter
-
+    conditions[:auditable_type] = @auditable_type
+    
     # get the audit results for this organization
     @audit_results = "#{@auditable_type}AuditResultsListReport".constantize.new.get_data(conditions)
 

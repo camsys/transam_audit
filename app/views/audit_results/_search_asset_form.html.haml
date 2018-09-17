@@ -1,8 +1,10 @@
 = form_tag audit_results_path, :id => 'filter_form', :method => "get", :class => 'navbar-form navbar-right panel-action' do
+  //.form-group
+  //  = select_tag(:types_filter, options_for_select(@types, :selected => @types_filter), :class => "form-control")
   .form-group
-    = select_tag(:types_filter, options_for_select(@types, :selected => @types_filter), :class => "form-control")
+    = select_tag(:fta_asset_category_filter, options_for_select(@fta_asset_categories.map{ |id| [(id.nil? ? "None" : FtaAssetCategory.find(id).name), id] }, :selected => @fta_asset_category_filter), :class => "form-control")
   .form-group
-    = select_tag(:audit_result_type_filter, options_for_select(AuditResultType.active.collect{|x| [x.name, x.id]}, :selected => @audit_result_type_filter), :class => "form-control")
+    = select_tag(:audit_result_type_filter, options_for_select(AuditResultType.active.collect{|x| [x.name.titleize, x.id]}, :selected => @audit_result_type_filter), :class => "form-control")
   .form-group
     = select_tag(:audit_filter, options_for_select(Audit.active.collect{|x| [x.name, x.id]}, :selected => @audit_filter), :class => "form-control")
 
