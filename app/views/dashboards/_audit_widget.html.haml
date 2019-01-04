@@ -26,9 +26,9 @@
             - audit_results[1].each do |row|
               - org_short_name = row[0]
               - org_id = org_data[org_short_name]
-              %tr{:data => {:action_path => audit_results_path(:org_filter =>org_id, :fta_asset_category_filter => row[1], :audit_filter => audit.id, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED)}}
+              %tr{:data => {:action_path => audit_results_path(:org_filter =>org_id, :filterable_filter => row[1], :audit_filter => audit.id, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED)}}
                 %td.left= org_short_name if @organization_list.length > 1
-                %td.left= FtaAssetCategory.find(row[1]).try(:name) unless row[1].nil?
+                %td.left= :filterable_type.classify.constantize.find(row[1]).try(:name) unless row[1].nil?
                 %td.right.col-sm-6
                   - pcnt_passed = ((row[3] / row[2].to_f) * 100).truncate
                   .progress.audit-result

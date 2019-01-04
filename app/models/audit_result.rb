@@ -33,7 +33,7 @@ class AuditResult < ActiveRecord::Base
   # Each audit result has a status type
   belongs_to :audit_result_type
 
-  belongs_to :fta_asset_category
+  belongs_to :filterable, :polymorphic => true
 
   #-----------------------------------------------------------------------------
   # Validations
