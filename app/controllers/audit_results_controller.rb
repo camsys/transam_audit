@@ -42,8 +42,8 @@ class AuditResultsController < OrganizationAwareController
     if @filterable_filter.blank?
       @filterable_filter = [@filterable_types.first]
     end
-    conditions[:filterable_type] = @filterable_filter[:filterable_type]
-    conditions[:filterable_id] = @filterable_filter[:filterable_id]
+    conditions[:filterable_type] = @filterable_filter[0]
+    conditions[:filterable_id] = @filterable_filter[1]
 
     # Check to see if we got an audit to sub select on.
     @audit_filter = params[:audit_filter]
