@@ -21,14 +21,14 @@ class AuditResultsSummaryReport < AbstractReport
       audit_results_criteria = {:audit_id => audit.id, :organization_id => org_id, :auditable_type => type}
       results = AuditResult.search_auditable(audit_results_criteria, type, audited_must_meet, audited_must_not_meet)
       
-      summary = results.group(:filterable_id).count
-      failed_summary = results.where(:audit_result_type => AuditResultType::AUDIT_RESULT_FAILED).group(:filterable_id).count
-      summary.each do |filterable_id, count|
+      summary = results.group(:filterable_type, :filterable_id).count
+      failed_summary = results.where(:audit_result_type => AuditResultType::AUDIT_RESULT_FAILED).group(:filterable_type, :filterable_id).count
+      summary.each do |filterable, count|
 
         if count > 0
           total   = count
-          failed  = failed_summary[filterable_id].to_i
-          data << [org_short_name, filterable_id, total, (total - failed), failed]
+          failed  = failed_summary[[filterable[0], filterable[1]]].to_i
+          data << [org_short_name, filterable[0], filterable[1], total, (total - failed), failed]
         end
       end
     end

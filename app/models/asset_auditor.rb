@@ -91,7 +91,8 @@ class AssetAuditor < AbstractAuditor
     # If this audit result doesn't exist create it then update it otherwise
     # find the existing one and update it
     # NOTE: using a.id as auditable_id, DO NOT use asset.id as asset is from specific asset table
-    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => a.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :filterable_type => "FtaAssetCategory", :filterable_id => asset.fta_asset_category)
+    puts asset.inspect
+    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => a.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :filterable_type => "FtaAssetCategory", :filterable_id => asset.fta_asset_category_id)
     audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
     if errors.present?
       audit_result.notes = errors.join("\n")
