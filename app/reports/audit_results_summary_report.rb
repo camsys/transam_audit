@@ -27,8 +27,8 @@ class AuditResultsSummaryReport < AbstractReport
 
         if count > 0
           total   = count
-          failed  = failed_summary[[filterable[0], filterable[1]]].to_i
-          data << [org_short_name, filterable[0], filterable[1], total, (total - failed), failed]
+          failed  = failed_summary[filterable].to_i
+          data << [org_short_name, filterable, total, (total - failed), failed]
         end
       end
     end

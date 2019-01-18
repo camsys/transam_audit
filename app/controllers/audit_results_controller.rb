@@ -16,7 +16,7 @@ class AuditResultsController < OrganizationAwareController
 
     # Get the list of audit types for this organization
     # @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
-    @filterable_types = AuditResult.where(:organization_id => @organization_list).pluck(:filterable_type, :filterable_id).uniq
+    @filterables = AuditResult.where(:organization_id => @organization_list).pluck(:filterable_type, :filterable_id).uniq
 
     conditions = Hash.new
 
@@ -40,7 +40,10 @@ class AuditResultsController < OrganizationAwareController
     # Check to see if we got type to select on
     @filterable_filter = params[:filterable_filter]
     if @filterable_filter.blank?
-      @filterable_filter = [@filterable_types.first]
+      @filterable_filter = [@filterables.first]
+    else
+      @filterable_filter = @filterable_filter.split("-")
+      @filterable_filter[1] = @filterable_filter[1].to_i
     end
     conditions[:filterable_type] = @filterable_filter[0]
     conditions[:filterable_id] = @filterable_filter[1]
