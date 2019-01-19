@@ -41,6 +41,7 @@ class Audit < ActiveRecord::Base
   validates :end_date,                :presence => true
   validates :description,             :presence => true
   validates :instructions,            :presence => true
+  validates :filterable_class_name,   :presence => true
 
   #-----------------------------------------------------------------------------
   # Scopes
@@ -60,7 +61,8 @@ class Audit < ActiveRecord::Base
     :start_date,
     :end_date,
     :auditor_class_name,
-    :active
+    :active,
+    :filterable_class_name
   ]
 
   #-----------------------------------------------------------------------------

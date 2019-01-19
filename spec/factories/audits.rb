@@ -8,6 +8,7 @@ FactoryBot.define do
     end_date Date.today.end_of_month
     auditor_class_name 'AssetAuditor'
     association :activity
+    filterable_class_name 'AssetType'
   end
 
 end

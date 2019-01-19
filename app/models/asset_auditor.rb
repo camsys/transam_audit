@@ -42,7 +42,7 @@ class AssetAuditor < AbstractAuditor
       write_to_activity_log org, "Performing #{context.name} on asset inventory"
       Rails.application.config.asset_base_class_name.constantize.operational.where('in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Rails.application.config.asset_base_class_name.constantize.find_by(object_key: obj_key)
-        update_status asset, context.start_date, context.end_date
+        update_status asset, context.start_date, context.end_date, context.filterable_class_name
       end
     end
 
@@ -51,7 +51,7 @@ class AssetAuditor < AbstractAuditor
   # Takes an asset (typed or untyped) and checks the compliance and updates the
   # audit table wth the results
   #-----------------------------------------------------------------------------
-  def update_status a, start_date, end_date
+  def update_status a, start_date, end_date, filterable_class_name
     errors = []
     if a.nil?
       Rails.logger.debug "Asset cannot be nil"
@@ -92,7 +92,7 @@ class AssetAuditor < AbstractAuditor
     # find the existing one and update it
     # NOTE: using a.id as auditable_id, DO NOT use asset.id as asset is from specific asset table
     puts asset.inspect
-    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => a.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :filterable_type => "FtaAssetCategory", :filterable_id => asset.fta_asset_category_id)
+    audit_result = AuditResult.find_or_initialize_by(:organization_id => asset.organization_id, :auditable_id => a.id, :auditable_type => Rails.application.config.asset_base_class_name, :audit_id => context.id, :filterable_type => filterable_class_name, :filterable_id => asset.send(filterable_class_name.foreign_key))
     audit_result.audit_result_type_id = (passed == true) ? AuditResultType::AUDIT_RESULT_PASSED : AuditResultType::AUDIT_RESULT_FAILED
     if errors.present?
       audit_result.notes = errors.join("\n")
