@@ -16,7 +16,7 @@ class AuditResultsController < OrganizationAwareController
 
     # Get the list of audit types for this organization
     # @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
-    @fta_asset_categories = AuditResult.where(:organization_id => @organization_list).pluck(:fta_asset_category_id).uniq
+    @filterables = AuditResult.where(:organization_id => @organization_list).pluck(:filterable_type, :filterable_id).uniq
 
     conditions = Hash.new
 
@@ -38,11 +38,15 @@ class AuditResultsController < OrganizationAwareController
 
 
     # Check to see if we got type to select on
-    @fta_asset_category_filter = params[:fta_asset_category_filter]
-    if @fta_asset_category_filter.blank?
-      @fta_asset_category_filter = [@fta_asset_categories.first]
+    @filterable_filter = params[:filterable_filter]
+    if @filterable_filter.blank?
+      @filterable_filter = [@filterables.first]
+    else
+      @filterable_filter = @filterable_filter.split("-")
+      @filterable_filter[1] = @filterable_filter[1].to_i
     end
-    conditions[:fta_asset_category_id] = @fta_asset_category_filter
+    conditions[:filterable_type] = @filterable_filter[0]
+    conditions[:filterable_id] = @filterable_filter[1]
 
     # Check to see if we got an audit to sub select on.
     @audit_filter = params[:audit_filter]
