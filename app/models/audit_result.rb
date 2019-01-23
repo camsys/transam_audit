@@ -100,7 +100,11 @@ class AuditResult < ActiveRecord::Base
 
   # Return the Rails path to this object
 	def path
-		"#{auditable_type.underscore}_path(:id => '#{auditable.object_key}')"
+    if auditable_type.include? 'Asset'
+      "inventory_path(:id => '#{auditable.object_key}')"
+    else
+      "#{auditable_type.underscore}_path(:id => '#{auditable.object_key}')"
+    end
 	end
 
   #-----------------------------------------------------------------------------
