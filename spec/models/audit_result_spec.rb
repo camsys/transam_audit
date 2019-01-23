@@ -46,7 +46,7 @@ RSpec.describe AuditResult, :type => :model do
 
   end
   it '.path' do
-    expect(test_result.path).to eq("transam_asset_path(:id => '#{test_asset.object_key}')")
+    expect(test_result.path).to eq("inventory_path(:id => '#{test_asset.object_key}')")
   end
 
 end
