@@ -40,9 +40,15 @@ class AssetAuditor < AbstractAuditor
     Organization.all.each do |org|
       # Only process operational assets
       write_to_activity_log org, "Performing #{context.name} on asset inventory"
-      all_assets = Rails.application.config.try(:assets_to_audit).present? ? Rails.application.config.assets_to_audit : Rails.application.config.asset_base_class_name.constantize.operational
+      all_assets = Rails.application.config.asset_base_class_name.constantize.operational
 
-      all_assets.where('in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
+      if Rails.application.config.try(:asset_auditor_config).present?
+        all_assets = Rails.application.config.asset_auditor_config[:class_name].constantize.operational.where(Rails.application.config.asset_auditor_config[:query])
+      else
+        all_assets = Rails.application.config.asset_base_class_name.constantize.operational
+      end
+
+      all_assets.where('transam_assets.in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
         asset = Rails.application.config.asset_base_class_name.constantize.find_by(object_key: obj_key)
         update_status asset, context.start_date, context.end_date, context.filterable_class_name
       end
