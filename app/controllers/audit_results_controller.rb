@@ -40,7 +40,7 @@ class AuditResultsController < OrganizationAwareController
     # Check to see if we got type to select on
     @filterable_filter = params[:filterable_filter]
     if @filterable_filter.blank?
-      @filterable_filter = [@filterables.first]
+      @filterable_filter = @filterables.first
     else
       @filterable_filter = @filterable_filter.split("-")
       @filterable_filter[1] = @filterable_filter[1].to_i

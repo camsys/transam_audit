@@ -48,7 +48,7 @@ class AssetAuditor < AbstractAuditor
         all_assets = Rails.application.config.asset_base_class_name.constantize.operational
       end
 
-      all_assets.where('transam_assets.in_service_date <= ?', context.end_date).where(:organization => org).order(:asset_subtype_id).pluck(:object_key).each do |obj_key|
+      all_assets.where('transam_assets.in_service_date <= ?', context.end_date).where(:organization => org).pluck(:object_key).each do |obj_key|
         asset = Rails.application.config.asset_base_class_name.constantize.find_by(object_key: obj_key)
         update_status asset, context.start_date, context.end_date, context.filterable_class_name
       end
