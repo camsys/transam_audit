@@ -30,7 +30,7 @@ audits = [
 
 # currently add auditable mixin to old assets as well
 system_config_extensions = [
-    {class_name: 'TransamAsset', extension_name: 'TransamAuditable', active: true}
+    {engine_name: 'audit', class_name: 'TransamAsset', extension_name: 'TransamAuditable', active: true}
 ]
 
 lookup_tables = %w{ audit_result_types }
