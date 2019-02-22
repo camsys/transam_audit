@@ -2,7 +2,7 @@
   //.form-group
   //  = select_tag(:types_filter, options_for_select(@types, :selected => @types_filter), :class => "form-control")
   .form-group
-    = select_tag(:filterable_filter, options_for_select(@filterables.map{ |type, id| [(id.nil? ? "None" : type.classify.constantize.find_by(id: id).name), "#{type}-#{id}"] }, :selected => "#{@filterable_filter[0]}-#{@filterable_filter[1]}"), :class => "form-control")
+    = select_tag(:filterable_filter, options_for_select(@filterables.map{ |type, id| [(id.nil? ? "None" : type.classify.constantize.find_by(id: id).to_s), "#{type}-#{id}"] }, :selected => "#{@filterable_filter[0]}-#{@filterable_filter[1]}"), :class => "form-control")
   .form-group
     = select_tag(:audit_result_type_filter, options_for_select(AuditResultType.active.collect{|x| [x.name.titleize, x.id]}, :selected => @audit_result_type_filter), :class => "form-control")
   .form-group
