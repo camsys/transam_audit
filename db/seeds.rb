@@ -30,8 +30,14 @@ audits = [
 
 # currently add auditable mixin to old assets as well
 system_config_extensions = [
-    {engine_name: 'audit', class_name: 'TransamAsset', extension_name: 'TransamAuditable', active: true}
+    {engine_name: 'audit', class_name: 'TransamAsset', extension_name: 'TransamAuditable', active: true},
+    {engine_name: 'audit', class_name: 'ConditionUpdateEvent', extension_name: 'TransamSubAuditable', active: true},
+    {engine_name: 'audit', class_name: 'ServiceStatusUpdateEvent', extension_name: 'TransamSubAuditable', active: true}
 ]
+
+if SystemConfig.transam_module_loaded? :transit
+  system_config_extensions << {engine_name: 'audit', class_name: 'MileageUpdateEvent', extension_name: 'TransamSubAuditable', active: true}
+end
 
 lookup_tables = %w{ audit_result_types }
 
