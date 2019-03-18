@@ -1,6 +1,15 @@
 TransamCore::Engine.load_seed
 TransamAudit::Engine.load_seed
 
+# core has mixins for tying policy to TransamAsset or tracking as replacable. this is usually added by engine but we add it to the dummy db seed so we can run tests
+system_config_extensions = [
+    {class_name: 'TransamAsset', extension_name: 'PolicyAware', active: true},
+    {class_name: 'TransamAsset', extension_name: 'ReplaceableAsset', active: true}
+]
+system_config_extensions.each do |extension|
+  SystemConfigExtension.find_or_create_by(extension)
+end
+
 puts "  Processing system_config"
 SystemConfig.find_or_create_by(:customer_id => 1,
   :start_of_fiscal_year => '07-01',
@@ -16,7 +25,6 @@ SystemConfig.find_or_create_by(:customer_id => 1,
   :geocoder_region => 'us',
   :num_forecasting_years => 12,
   :num_reporting_years => 20,
-  :asset_base_class_name => 'Asset',
   :max_rows_returned => 500,
   :data_file_path => '/data/'
 )

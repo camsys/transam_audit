@@ -13,7 +13,7 @@ class AuditableUpdateJob < Job
 
   def run
     if audit.operational?
-      audit.auditor.update_status auditable, audit.start_date, audit.end_date
+      audit.auditor.update_status auditable, audit.start_date, audit.end_date, audit.filterable_class_name
     end
   end
 

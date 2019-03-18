@@ -33,7 +33,7 @@ class AuditResult < ActiveRecord::Base
   # Each audit result has a status type
   belongs_to :audit_result_type
 
-  belongs_to :fta_asset_category
+  belongs_to :filterable, :polymorphic => true
 
   #-----------------------------------------------------------------------------
   # Validations
@@ -100,7 +100,11 @@ class AuditResult < ActiveRecord::Base
 
   # Return the Rails path to this object
 	def path
-		"#{auditable_type.underscore}_path(:id => '#{auditable.object_key}')"
+    if auditable_type.include? 'Asset'
+      "inventory_path(:id => '#{auditable.object_key}')"
+    else
+      "#{auditable_type.underscore}_path(:id => '#{auditable.object_key}')"
+    end
 	end
 
   #-----------------------------------------------------------------------------

@@ -8,7 +8,10 @@ RSpec.describe AuditRunnerJob, :type => :job do
 
     Asset.destroy_all
     AuditResult.destroy_all
-    test_asset = create(:buslike_asset, :service_status_type_id => 1)
+    test_subtype = create(:asset_subtype)
+    test_parent_policy = create(:parent_policy, type: test_subtype.asset_type_id, subtype: test_subtype.id)
+    test_policy = create(:policy, organization: test_parent_policy.organization, parent: test_parent_policy)
+    test_asset = create(:buslike_asset, asset_subtype: test_subtype, organization: test_parent_policy.organization)
 
     test_audit = create(:audit, :activity => test_activity)
     AuditRunnerJob.new({:context => test_activity}).run

@@ -10,9 +10,11 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
+gem 'active_record-acts_as', git: 'https://github.com/camsys/active_record-acts_as', branch: 'master' # use our fork
+
 # To use debugger
 # gem 'debugger'
-gem 'transam_core', git: 'https://github.com/camsys/transam_core', branch: :quarter3
+gem 'transam_core', git: 'https://github.com/camsys/transam_core', branch: :quarter1
 gem 'mysql2', "~> 0.5.1" # lock gem for dummy app
 gem "capybara", '2.6.2' # lock gem for old capybara behavior on hidden element xpath
 gem 'sass-rails'

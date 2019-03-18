@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe AuditResult, :type => :model do
 
-  let(:test_asset) { create(:buslike_asset) }
+  let(:test_subtype) { create(:asset_subtype)}
+  let(:test_parent_policy) { create(:parent_policy, type: test_subtype.asset_type_id, subtype: test_subtype.id) }
+  let(:test_policy) { create(:policy, organization: test_parent_policy.organization, parent: test_parent_policy) }
+  let(:test_asset) { create(:buslike_asset, asset_subtype: test_subtype, organization: test_policy.organization) }
   let(:test_result) { create(:audit_result, :auditable_id => test_asset.id, :organization => test_asset.organization) }
 
   describe 'associations' do
@@ -43,7 +46,7 @@ RSpec.describe AuditResult, :type => :model do
 
   end
   it '.path' do
-    expect(test_result.path).to eq("asset_path(:id => '#{test_asset.object_key}')")
+    expect(test_result.path).to eq("inventory_path(:id => '#{test_asset.object_key}')")
   end
 
 end
