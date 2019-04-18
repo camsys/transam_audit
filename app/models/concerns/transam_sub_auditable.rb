@@ -38,8 +38,8 @@ module TransamSubAuditable
     parent_class_name = SystemConfigExtension.find_by(extension_name: 'TransamAuditable').class_name
 
     parent = self.send(parent_class_name.underscore)
-    parent.send(:check_for_audit_changes)
-    parent.send(:update_audits)
+    parent.check_for_audit_changes
+    parent.update_audits
   end
 
 end
