@@ -62,16 +62,11 @@ module TransamAuditable
     Audit.active.where(:id => audit_results.pluck(:audit_id).uniq)
   end
 
-  #-----------------------------------------------------------------------------
-  # Protected Methods
-  #-----------------------------------------------------------------------------
-  protected
-
   def check_for_audit_changes
     Rails.logger.debug "checking for audit changes"
     audit_changed = false
     audits.each do |audit|
-      if self.in_service_date <= audit.end_date && audit.operational? and audit.auditor.detect_changes? self
+      if audit.operational? and audit.auditor.detect_changes? self
         audit_changed = true
         break
       end
