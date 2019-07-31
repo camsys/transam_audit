@@ -12,6 +12,7 @@ FactoryBot.define do
     association :organization_type, :factory => :organization_type
     sequence(:name) { |n| "Org#{n}" }
     short_name { name }
+    legal_name { name }
     license_holder { true }
   end
 
