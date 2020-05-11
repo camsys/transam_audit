@@ -82,7 +82,7 @@
           "Description": '#{h a.auditable.description }',
           "Result": '#{h a.audit_result_type }',
           "Updated At": '#{h format_as_date(a.updated_at) }',
-          "Notes": '#{h format_as_text(a.notes).html_safe }',
+          "Notes": '#{h sanitize(a.notes, tags:[]).gsub("\n", ' ') }',
         }, #{index});
 
 
