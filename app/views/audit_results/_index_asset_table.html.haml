@@ -75,7 +75,7 @@
       :javascript
         add_row('#{table_dom_id}',
         {        
-          "Organization": '#{h link_to a.organization.short_name }',
+          "Organization": '#{h link_to a.organization.short_name, inventory_path(a.auditable) }',
           "Audit Type": '#{h a.audit }',
           "Type": '#{h a.class_name }',
           "Asset ID": '#{h a.auditable.asset_tag }',
