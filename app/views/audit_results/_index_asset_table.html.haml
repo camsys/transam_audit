@@ -37,9 +37,78 @@
       :data_source => 'client',
       :url => ''}}
 
+  :javascript
+    // capture relationship between asset id and object key
+    let id_to_key_state = {};
+    var selected_rows = new Set();
+    var selected_states = new Set();
+    let key_state = [];
+    //$('##{table_dom_id}').ready(function() {
+      
+      // Disable the table actions
+      enable_disable_table_actions();
+
+      // Add a handler for the print action which appends the selected orders to
+      // the href
+      $(".selected-action").on('click', function(e) {
+
+        //get appropriate bulk update form and then update targets
+        $(this).parent().children("input[name='targets']").val(Array.from(selected_rows));
+        //return true;
+      });
+
+      $('##{table_dom_id}').on('change','.cell-checkbox input[type="checkbox"]', function(e, row) {
+        update_selected();
+      }).on('change','.header-checkbox input[type="checkbox"]:checked', function(e, row) {
+        update_selected();
+      }).ready(function() {
+        // Table reloaded, clear saved selection
+        selected_rows = new Set();
+        selected_states = new Set();
+        enable_disable_table_actions();
+      });
+    //});
+
+    // Enables or disables the package actions depending on how many are selected
+    function enable_disable_table_actions() {
+      var num = selected_rows.size;
+      if (num > 0) {
+        if (selected_states.size == 1) {
+          $('.selected-action').removeClass('disabled');
+        } else {
+          $('.selected-action').addClass('disabled');
+        }
+      } else {
+        $('.selected-action').addClass('disabled');
+      }
+    };
+
+    // Updates the selected rows in the table
+    function update_selected() {
+      if(!window['#{table_dom_id}'].checkedRows){
+        window['#{table_dom_id}'].checkedRows = {};
+      }
+      var selected = window['#{table_dom_id}'].checkedRows;
+      selected_rows = new Set();
+      selected_states = new Set();
+      for (let k of Object.keys(selected)) {
+        key_state = id_to_key_state[selected[k]["Asset ID"]];
+        selected_rows.add(key_state[0]);
+        selected_states.add(key_state[1].toLowerCase().replace(/ /g, "_"));
+      }
+      //console.log(selected_rows);
+      enable_disable_table_actions();
+    };
+
+
+
+
   - audit_results.each_with_index do |a, index|
     - unless a.auditable.nil?
       :javascript
+        
+        id_to_key_state["#{h a.auditable.asset_tag}"] = ['#{h a.auditable.object_key }','#{h a.audit_result_type }'];
+
         add_row('#{table_dom_id}',
         {        
           "org_name": '#{h link_to a.organization.short_name, inventory_path(a.auditable) }',
@@ -51,5 +120,6 @@
           "6": '#{h format_as_date(a.updated_at) }',
           "notes": '#{h sanitize((a.notes || ""), tags:[]).gsub("\n", ' ') }',
         }, #{index});
+
 
 = render :partial => 'shared/table_scripts', :locals => {:table_id => 'audit_results_table', :path_pattern => activity_path("xxx")}
