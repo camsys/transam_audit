@@ -8,11 +8,3 @@
       %i.fa.fa-line-chart.fa-fw
       = "All Audit Results"
 
-
-  - audits.each do |audit|
-    %li.text-left
-      - type_filter = audit.audit_results.count > 0 ? audit.audit_results.first.class_name : ''
-      = link_to audit_results_path(:audit_filter => audit.id, :types_filter => type_filter, :audit_result_type_filter => AuditResultType::AUDIT_RESULT_FAILED) do
-        %i.fa.fa-line-chart.fa-fw
-        = "#{audit.name} Results"
-

@@ -1,126 +1,125 @@
+:ruby
+  table_dom_id = SecureRandom.hex
+
+
+
 #table_actions.btn-toolbar
   = render :partial => "index_actions"
 
-.table-responsive
-  %table.table.table-hover{:id => 'audit_results_table', :data => {:toggle => 'table',
-    :pagination => 'true',
-    :show_pagination_switch => 'false',
-    :page_list => "[5, 10, 20, 50, 100, 200, 10000]",
-    :page_size => current_user.num_table_rows,
-    :search => 'false',
-    :toolbar => "#table_actions",
-    :export_types => "['csv', 'txt', 'excel']",
-    :show_export => 'false',
-    :resizable => 'true',
-    :show_columns => 'false',
-    :show_toggle => 'false',
-    :maintain_selected => 'true',
-    :single_select => 'false',
-    :cookie => 'true',
-    :cookie_id_table => "audit_results_assets_id",
-    :cookie_expire => "1y"}}
-    %thead
-      %tr
-        %th.center{:data => {:field => 'checked', :checkbox => 'true'}}
-        %th.center{:data => {:field => 'object_key', :visible => 'false'}}
-        - if @organization_list.count > 1
-          %th.center{:data => {:field => 'org', :sortable => 'true'}} Org
-        %th.center{:data => {:sortable => 'true'}} Audit
-        %th.center{:data => {:field => 'object_type', :sortable => 'true'}} Type
-        %th.center{:data => {:sortable => 'true'}} Asset Tag
-        %th.center{:data => {:sortable => 'true'}} Description
-        %th.center{:data => {:sortable => 'true'}} Result
-        %th.center{:data => {:sortable => 'true'}} Updated At
-        %th.center{:data => {:sortable => 'true'}} Notes
 
-    %tbody
-      - audit_results.each do |a|
-        -unless a.auditable.nil? #Don't show results for objects that have been deleted
-          %tr
-            %td
-            %td.center.nowrap= a.auditable.object_key
-            - if @organization_list.count > 1
-              %td.left.nowrap= a.organization.short_name
-            %td.center.nowrap= a.audit
-            %td.left.nowrap= a.class_name
-            %td.left.nowrap
-              %span.hidden= a.auditable.asset_tag
-              = link_to a.auditable.asset_tag, inventory_path(a.auditable)
-            %td.left.nowrap= a.auditable.description
-            %td.center.nowrap= a.audit_result_type
-            %td.center.nowrap= format_as_date(a.updated_at)
-            %td.left= format_as_text(a.notes)
 
-= render :partial => 'shared/table_scripts', :locals => {:table_id => 'audit_results_table', :path_pattern => activity_path("xxx")}
 
-:javascript
+= javascript_include_tag  "https://kit.fontawesome.com/#{ENV['FONT_AWESOME']}.js"
+.library-table
+  %table.elbat{:id => table_dom_id,
+    :use => 'true',
+    :data => {:use => 'true',
+      :table_code => 'audit',
+      :side => 'client',
+      :current_page => '0',
+      :current_page_size => '10',
+      :page_sizes => "10,20,50,100",
+      :search => 'client',
+      :export => "['csv', 'txt']",
+      :columns => '{"org_name":{"name":"Organization","type":"drilldown-link","width":"10%"},
+                    "audit_type":{"name":"Audit Type","width":"12%"},
+                    "2":{"name":"Type","width":"12%"},
+                    "asset_id":{"name":"Asset ID","width":"12%"},
+                    "4":{"name":"Description","width":"8%"},
+                    "5":{"name":"Result","width":"8%"},
+                    "6":{"name":"Updated At","type":"right-align","width":"8%"},
+                    "notes":{"name":"Notes","width":"12%"}}',
+      :selected_columns => "org_name,audit_type,2,asset_id,4,5,6,notes",
+      :cookies => "true",
+      :sort => 'client',
+      :params => "{}",
+      :filter => "[]",
+      :data_source => 'client',
+      :url => ''}}
 
-  var selected_rows = new Set();
-  var selected_states = new Set();
+  :javascript
+    // capture relationship between asset id and object key
+    let id_to_key_state = {};
+    var selected_rows = new Set();
+    var selected_states = new Set();
+    let key_state = [];
+    //$('##{table_dom_id}').ready(function() {
+      
+      // Disable the table actions
+      enable_disable_table_actions();
 
-  $(document).ready(function() {
+      // Add a handler for the print action which appends the selected orders to
+      // the href
+      $(".selected-action").on('click', function(e) {
 
-    // Disable the table actions
-    enable_disable_table_actions();
+        //get appropriate bulk update form and then update targets
+        $(this).parent().children("input[name='targets']").val(Array.from(selected_rows));
+        //return true;
+      });
 
-    // Add a handler for the print action which appends the selected orders to
-    // the href
-    $(".selected-action").on('click', function(e) {
+      $('##{table_dom_id}').on('change','.cell-checkbox input[type="checkbox"]', function(e, row) {
+        update_selected();
+      }).on('change','.header-checkbox input[type="checkbox"]:checked', function(e, row) {
+        update_selected();
+      }).ready(function() {
+        // Table reloaded, clear saved selection
+        selected_rows = new Set();
+        selected_states = new Set();
+        enable_disable_table_actions();
+      });
+    //});
 
-      //get appropriate bulk update form and then update targets
-      $(this).parent().children("input[name='targets']").val(Array.from(selected_rows));
-      return true;
-    });
-  });
-
-  $('#audit_results_table').on('check.bs.table', function(e, row) {
-    update_selected();
-  }).on('uncheck.bs.table', function(e, row) {
-    update_selected();
-  }).on('check-all.bs.table', function(e, row) {
-    update_selected();
-  }).on('uncheck-all.bs.table', function(e, row) {
-    update_selected();
-  }).on('sort.bs.table', function(e, name, order) {
-    //console.log('Sorting on ' + name + ' dir => ' + order);
-    $('#audit_results_table').bootstrapTable('selectPage', 1);
-  }).on('load-success.bs.table', function() {
-    // Table reloaded, clear saved selection
-    selected_rows = new Set();
-    selected_states = new Set();
-    enable_disable_table_actions();
-  });
-
-  // Enables or disables the package actions depending on how many are selected
-  function enable_disable_table_actions() {
-    var num = selected_rows.size;
-    if (num > 0) {
-      if (selected_states.size == 1) {
-        $('.selected-action').removeClass('disabled');
+    // Enables or disables the package actions depending on how many are selected
+    function enable_disable_table_actions() {
+      var num = selected_rows.size;
+      if (num > 0) {
+        if (selected_states.size == 1) {
+          $('.selected-action').removeClass('disabled');
+        } else {
+          $('.selected-action').addClass('disabled');
+        }
       } else {
         $('.selected-action').addClass('disabled');
       }
-    } else {
-      $('.selected-action').addClass('disabled');
-    }
-  };
+    };
 
-  // Updates the selected rows in the table
-  function update_selected() {
-    var selected = $('#audit_results_table').bootstrapTable('getSelections');
-    selected_rows = new Set();
-    selected_states = new Set();
-    for (i = 0; i < selected.length; i++) {
-      //console.log(selected[i]);
-      selected_rows.add(selected[i].object_key);
-      selected_states.add(selected[i].org+"_"+selected[i].object_type.toLowerCase().replace(/ /g, "_"));
-    }
-    //console.log(selected_rows);
-    enable_disable_table_actions();
-  };
+    // Updates the selected rows in the table
+    function update_selected() {
+      if(!window['#{table_dom_id}'].checkedRows){
+        window['#{table_dom_id}'].checkedRows = {};
+      }
+      var selected = window['#{table_dom_id}'].checkedRows;
+      selected_rows = new Set();
+      selected_states = new Set();
+      for (let k of Object.keys(selected)) {
+        key_state = id_to_key_state[selected[k]["Asset ID"]];
+        selected_rows.add(key_state[0]);
+        selected_states.add(key_state[1].toLowerCase().replace(/ /g, "_"));
+      }
+      //console.log(selected_rows);
+      enable_disable_table_actions();
+    };
 
-  // Removes an object identified by its object key from the set of objects selected
-  function remove_from_selected(object_key) {
-    selected_rows.delete(object_key);
-    enable_disable_table_actions();
-  };
+
+
+
+  - audit_results.each_with_index do |a, index|
+    - unless a.auditable.nil?
+      :javascript
+        
+        id_to_key_state["#{h a.auditable.asset_tag}"] = ['#{h a.auditable.object_key }','#{h a.audit_result_type }'];
+
+        add_row('#{table_dom_id}',
+        {        
+          "org_name": '#{h link_to a.organization.short_name, inventory_path(a.auditable) }',
+          "audit_type": '#{h a.audit }',
+          "2": '#{h a.class_name }',
+          "asset_id": '#{h a.auditable.asset_tag }',
+          "4": '#{h a.auditable.description }',
+          "5": '#{h a.audit_result_type }',
+          "6": '#{h format_as_date(a.updated_at) }',
+          "notes": '#{h sanitize((a.notes || ""), tags:[]).gsub("\n", ' ') }',
+        }, #{index});
+
+
+= render :partial => 'shared/table_scripts', :locals => {:table_id => 'audit_results_table', :path_pattern => activity_path("xxx")}

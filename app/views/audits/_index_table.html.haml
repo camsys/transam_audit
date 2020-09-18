@@ -1,42 +1,86 @@
 :ruby
   table_dom_id = SecureRandom.hex
 
-.table-responsive
-  %table.table.table-hover{:id => table_dom_id, :data => {:toggle => 'table',
-    :pagination => 'true',
-    :show_pagination_switch => 'false',
-    :page_list => "[5, 10, 20, 50, 100, 200, 10000]",
-    :page_size => current_user.num_table_rows,
-    :search => 'false',
-    :toolbar => "#table_actions",
-    :export_types => "['csv', 'txt', 'excel']",
-    :show_export => 'false',
-    :show_columns => 'false',
-    :show_toggle => 'false',
-    :cookie => 'true',
-    :cookie_id_table => "auditsid",
-    :cookie_expire => "1y"}}
-    %thead
-      %tr
-        %th.center{:data => {:sortable => 'true'}} Name
-        %th.center{:data => {:sortable => 'true'}} Description
-        %th.center{:data => {:sortable => 'true'}} Instructions
-        -# %th.center{:data => {:sortable => 'true'}} Schedule
-        %th.center{:data => {:sortable => 'true'}} Last Run
-        %th.center{:data => {:sortable => 'true'}} Operational
-        %th.center{:data => {:sortable => 'true'}} Active
-        %th.center{:data => {:sortable => 'true'}} Updated At
 
-    %tbody
-      - audits.each do |a|
-        %tr{:id => a.object_key, :class => 'action-path'}
-          %td.left.nowrap= a.name
-          %td.left= format_as_text(a.description)
-          %td.left= format_as_text(a.instructions)
-          -# %td.left= link_to a.activity, activity_path(a.activity) if a.activity.present?
-          %td.center.nowrap= format_as_date(a.last_run)
-          %td.center= format_as_boolean(a.operational?)
-          %td.center= format_as_boolean(a.active)
-          %td.center.nowrap= format_as_date(a.updated_at)
+
+= javascript_include_tag  "https://kit.fontawesome.com/#{ENV['FONT_AWESOME']}.js"
+.library-table
+  %table.elbat{:id => table_dom_id,
+    :use => 'true',
+    :data => {:use => 'true',
+      :table_code => 'audits',
+      :side => 'client',
+      :current_page => '0',
+      :current_page_size => '10',
+      :page_sizes => "10,20,50,100",
+      :search => 'client',
+      :export => "['csv', 'txt']",
+      :columns => '{"name":{"name":"Name","type":"drilldown-link","width":"10%"},
+                    "description":{"name":"Description","width":"30%"},
+                    "2":{"name":"Instructions","width":"30%"},
+                    "3":{"name":"Schedule","width":"8%"},
+                    "last_run":{"name":"Last Run","width":"8%"},
+                    "5":{"name":"Operational","width":"8%"},
+                    "6":{"name":"Active","width":"8%"},
+                    "7":{"name":"Updated At","type":"right-align","width":"10%"}}',
+      :selected_columns => "name,description,2,last_run,5,6,7",
+      :cookies => "true",
+      :sort => 'client',
+      :sort_params => @params,
+      :filter => "[]",
+      :data_source => 'client',
+      :url => ''}}
+  - audits.each_with_index do |a, index|
+    :javascript
+      add_row('#{table_dom_id}',
+      {
+        "name": '#{h link_to a.name, audit_path(a) }',
+        "description": '#{h format_as_text(a.description) }',
+        "2": '#{h format_as_text(a.instructions) }',
+        "3": '#{h link_to a.activity, activity_path(a.activity) if a.activity.present? }',
+        "last_run": '#{h format_as_date(a.last_run) }',
+        "5": "#{h format_as_boolean(a.operational?) }",
+        "6": "#{h format_as_boolean(a.active) }",
+        "7": '#{h format_as_date(a.updated_at) }',
+
+      }, #{index});
+
+-#.table-responsive
+-#  %table.table.table-hover{:id => table_dom_id, :data => {:toggle => 'table',
+-#    :pagination => 'true',
+-#    :show_pagination_switch => 'false',
+-#    :page_list => "[5, 10, 20, 50, 100, 200, 10000]",
+-#    :page_size => current_user.num_table_rows,
+-#    :search => 'false',
+-#    :toolbar => "#table_actions",
+-#    :export_types => "['csv', 'txt', 'excel']",
+-#    :show_export => 'false',
+-#    :show_columns => 'false',
+-#    :show_toggle => 'false',
+-#    :cookie => 'true',
+-#    :cookie_id_table => "auditsid",
+-#    :cookie_expire => "1y"}}
+-#    %thead
+-#      %tr
+-#        %th.center{:data => {:sortable => 'true'}} Name
+-#        %th.center{:data => {:sortable => 'true'}} Description
+-#        %th.center{:data => {:sortable => 'true'}} Instructions
+-#        -# %th.center{:data => {:sortable => 'true'}} Schedule
+-#        %th.center{:data => {:sortable => 'true'}} Last Run
+-#        %th.center{:data => {:sortable => 'true'}} Operational
+-#        %th.center{:data => {:sortable => 'true'}} Active
+-#        %th.center{:data => {:sortable => 'true'}} Updated At
+-#
+-#    %tbody
+-#      - audits.each do |a|
+-#        %tr{:id => a.object_key, :class => 'action-path'}
+-#          %td.left.nowrap= a.name
+-#          %td.left= format_as_text(a.description)
+-#          %td.left= format_as_text(a.instructions)
+-#          -# %td.left= link_to a.activity, activity_path(a.activity) if a.activity.present?
+-#          %td.center.nowrap= format_as_date(a.last_run)
+-#          %td.center= format_as_boolean(a.operational?)
+-#          %td.center= format_as_boolean(a.active)
+-#          %td.center.nowrap= format_as_date(a.updated_at)
 
 = render :partial => 'shared/table_scripts', :locals => {:table_id => table_dom_id, :path_pattern => audit_path("xxx")}

@@ -1,4 +1,4 @@
-.col-sm-12.col-md-10.col-md-offset-1
+.col-sm-12
   .page-header
-    %h2 Audit Results
-    = render "index_#{@auditable_type.downcase.pluralize}"
+    %h2 Audits
+  = render "index_#{@auditable_type.downcase.pluralize}"
