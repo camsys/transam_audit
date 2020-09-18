@@ -73,6 +73,7 @@ module TransamAuditable
     end
     self.has_audit_changes = audit_changed
     return true
+
   end
 
   #-----------------------------------------------------------------------------
