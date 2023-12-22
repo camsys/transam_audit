@@ -4,12 +4,12 @@
   = format_field("Auditor", audit.auditor_class_name)
   %hr
   = format_field("Active", format_as_boolean(audit.active))
-  = format_field("Data Update Start Date", format_as_date(audit.start_date))
-  = format_field("Data Update End Date", format_as_date(audit.end_date))
+  = format_field("Date of Report Range Start Date", format_as_date(audit.start_date))
+  = format_field("Date of Report Range End Date", format_as_date(audit.end_date))
   %hr
   = format_field("Operational", format_as_boolean(audit.operational?))
-  = format_field("Audit Activity Start Date", format_as_date(audit.activity.start_date))
-  = format_field("Audit Activity End Date", format_as_date(audit.activity.end_date))
+  = format_field("CPT Audit Process Activity Start Date", format_as_date(audit.activity.start_date))
+  = format_field("CPT Audit Process Activity End Date", format_as_date(audit.activity.end_date))
   %hr
   = format_field("Last Run", format_as_date(audit.last_run))
   = format_field("Created On", format_as_date(audit.created_at))
