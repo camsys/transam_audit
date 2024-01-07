@@ -15,7 +15,7 @@ class AuditUpdateJob < Job
     audit.auditor.audit
 
     event_url = Rails.application.routes.url_helpers.audit_results_path
-    audit_notification = Notification.create(text: "#{audit.name} has been run with new Data Update Start Date and End Date.", link: event_url)
+    audit_notification = Notification.create(text: "#{audit.name} has been run with new Date of Report Range Start Date and Date of Report Range End Date.", link: event_url)
     UserNotification.create(user: creator, notification: audit_notification)
 
   end
