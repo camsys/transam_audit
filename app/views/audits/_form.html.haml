@@ -33,13 +33,13 @@
   .row
     .col-sm-4
       = hidden_field_tag(:old_start_date, format_as_date(f.object.start_date))
-      = f.input :start_date, :wrapper => :vertical_append, :label => "Data Update Start Date" do
+      = f.input :start_date, :wrapper => :vertical_append, :label => "Date of Report Range Start Date" do
         = f.input_field :start_date, :as => :string, :class => 'form-control datepicker', :data => {'date-container' => '#page'}, :value => format_as_date(f.object.start_date)
         %span.input-group-addon
           %i.fa.fa-calendar
     .col-sm-4
       = hidden_field_tag(:old_end_date, format_as_date(f.object.end_date))
-      = f.input :end_date, :wrapper => :vertical_append, :label => "Data Update End Date" do
+      = f.input :end_date, :wrapper => :vertical_append, :label => "Date of Report Range End Date" do
         = f.input_field :end_date, :as => :string, :class => 'form-control datepicker', :data => {'date-container' => '#page'}, :value => format_as_date(f.object.end_date)
         %span.input-group-addon
           %i.fa.fa-calendar
