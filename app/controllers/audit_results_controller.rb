@@ -25,13 +25,16 @@ class AuditResultsController < OrganizationAwareController
       @auditable_type = Rails.application.config.asset_base_class_name
     end
 
-    # Filter by Organizaiton
-    conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
+    # Filter by Organization
+    @organization_ids = conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
 
     # Check to see if we got type to select on
     @filterable_filter = params[:filterable_filter]
     if @filterable_filter.blank?
-      @filterable_filter = @filterables.first
+      @filterable_filter = @filterables.first.dup
+      # Check for separate values coming in from other sources e.g. audit widget
+      @filterable_filter[0] = params[:filterable_type] if params[:filterable_type].present?
+      @filterable_filter[1] = params[:filterable_id].to_i if params[:filterable_id].present?
     else
       @filterable_filter = @filterable_filter.split("-")
       @filterable_filter[1] = @filterable_filter[1].to_i
