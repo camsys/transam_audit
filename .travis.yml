@@ -17,4 +17,5 @@ script:
 - bundle exec rspec
 before_install:
 - mysql -e "create database IF NOT EXISTS transam_audit_testing;" -uroot
-bundler_args: --without not_travis
+- bundle config set without 'not_travis'
+- gem install -v 2.3.4 bundler --document=

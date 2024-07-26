@@ -14,8 +14,6 @@ class AuditResultsController < OrganizationAwareController
 
     add_breadcrumb "Audit Results"
 
-    # Get the list of audit types for this organization
-    # @types = AuditResult.where(:organization_id => @organization_list).pluck(:class_name).uniq
     @filterables = AuditResult.where(:organization_id => @organization_list).distinct.pluck(:filterable_type, :filterable_id)
     @filterables = [[nil,nil]] if @filterables.empty? # make sure there is an array even if no results
 
@@ -27,21 +25,16 @@ class AuditResultsController < OrganizationAwareController
       @auditable_type = Rails.application.config.asset_base_class_name
     end
 
-    # Filter by Organizaiton
-    conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
-
-    # Check to see if we got type to select on
-    # @types_filter = params[:types_filter]
-    # if @types_filter.blank?
-    #  @types_filter = [@types.first]
-    # end
-    #conditions[:class_name] = @types_filter
-
+    # Filter by Organization
+    @organization_ids = conditions[:organization_id] = params[:org_filter].blank? ? @organization_list : [params[:org_filter].to_i] & @organization_list
 
     # Check to see if we got type to select on
     @filterable_filter = params[:filterable_filter]
     if @filterable_filter.blank?
-      @filterable_filter = @filterables.first
+      @filterable_filter = @filterables.first.dup
+      # Check for separate values coming in from other sources e.g. audit widget
+      @filterable_filter[0] = params[:filterable_type] if params[:filterable_type].present?
+      @filterable_filter[1] = params[:filterable_id].to_i if params[:filterable_id].present?
     else
       @filterable_filter = @filterable_filter.split("-")
       @filterable_filter[1] = @filterable_filter[1].to_i
@@ -66,9 +59,6 @@ class AuditResultsController < OrganizationAwareController
     
     # get the audit results for this organization
     @audit_results = "#{@auditable_type}AuditResultsListReport".constantize.new.get_data(conditions)
-
-    # cache the set of object keys in case we need them later
-    #cache_list(@activities, INDEX_KEY_LIST_VAR)
 
     respond_to do |format|
       format.html # index.html.erb
