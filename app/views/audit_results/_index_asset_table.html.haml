@@ -75,11 +75,14 @@
       if (num > 0) {
         if (selected_states.size == 1) {
           $('.selected-action').removeClass('disabled');
+          $('.selected-action').prop('disabled', false);
         } else {
           $('.selected-action').addClass('disabled');
+          $('.selected-action').prop('disabled', true);
         }
       } else {
         $('.selected-action').addClass('disabled');
+        $('.selected-action').prop('disabled', true);
       }
     };
 
