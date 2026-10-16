@@ -1,3 +1,3 @@
 module TransamAudit
-  VERSION = "2.52.0"
+  VERSION = "2.72.0-rc"
 end
